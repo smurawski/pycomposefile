@@ -1,6 +1,7 @@
 import unittest
 from pycompose import ComposeFile
 
+
 class TestComposeVersion(unittest.TestCase):
     compose_with_no_version = """
 services:
@@ -65,7 +66,6 @@ services:
       - server-certificate
 """
 
-
     def test_no_version_present(self):
         composeFile = ComposeFile(self.compose_with_no_version)
         self.assertIsNone(composeFile.version.version_number)
@@ -81,6 +81,7 @@ services:
     def test_unknown_version_present(self):
         composeFile = ComposeFile(self.compose_with_unknown_version)
         self.assertEqual(composeFile.version.version_number, "100.1.alpha")
+
 
 if __name__ == '__main__':
     unittest.main()

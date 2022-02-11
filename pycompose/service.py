@@ -1,5 +1,6 @@
 from .unsupported import UnsupportedConfiguration
 
+
 class Service:
     def __init__(self, container_name, service_entry):
         self.image = service_entry.pop("image", None)
@@ -12,10 +13,3 @@ class Service:
 
         # TODO replace with actionale reporting
         self.unsupported_keys = list(service_entry.keys())
-        
-        
-        
-
-
-        
-

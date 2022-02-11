@@ -1,5 +1,6 @@
 import yaml
 
+
 class Version:
     def __init__(self, deserialized_compose_file):
         if "version" in deserialized_compose_file:

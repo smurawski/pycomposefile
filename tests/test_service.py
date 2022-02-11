@@ -1,6 +1,7 @@
 import unittest
 from pycompose import ComposeFile
 
+
 class TestComposeServices(unittest.TestCase):
     compose_with_no_services = """
 version: 3.9
@@ -48,11 +49,11 @@ services:
     def test_container_name_default_from_service_name(self):
         compose_file = ComposeFile(self.compose_with_one_service)
         self.assertEqual(compose_file.services["frontend"].container_name, "frontend")
-    
+
     def test_container_name_assigned_from_service(self):
         compose_file = ComposeFile(self.compose_with_one_service_complex)
         self.assertEqual(compose_file.services["frontend"].container_name, "myfrontend")
-    
+
     def test_cpu_count_default_to_containerapps_default(self):
         containerapps_default_cpu_count = 0.5
         compose_file = ComposeFile(self.compose_with_one_service)
@@ -65,6 +66,7 @@ services:
     def test_all_valid_keys_are_removed(self):
         compose_file = ComposeFile(self.compose_with_one_service)
         self.assertEqual(compose_file.services["frontend"].unsupported_keys, [])
+
 
 if __name__ == '__main__':
     unittest.main()

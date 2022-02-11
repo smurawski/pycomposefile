@@ -2,8 +2,9 @@ from .version import Version
 from .service import Service
 import yaml
 
+
 class ComposeFile:
-    
+
     def __init__(self, compose_file):
         deserialized_compose_file = yaml.load(compose_file, Loader=yaml.Loader)
         self.version = Version(deserialized_compose_file)
