@@ -49,7 +49,7 @@ services:
       - server-certificate
 """
 
-    compose_wth_unknown_version = """
+    compose_with_unknown_version = """
 version: 100.1.alpha
 services:
   frontend:
@@ -79,7 +79,7 @@ services:
         self.assertEqual(composeFile.version.version_number, "3.8")
 
     def test_unknown_version_present(self):
-        composeFile = ComposeFile(self.compose_wth_unknown_version)
+        composeFile = ComposeFile(self.compose_with_unknown_version)
         self.assertEqual(composeFile.version.version_number, "100.1.alpha")
 
 if __name__ == '__main__':
