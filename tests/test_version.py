@@ -67,20 +67,20 @@ services:
 """
 
     def test_no_version_present(self):
-        composeFile = ComposeFile(self.compose_with_no_version)
-        self.assertIsNone(composeFile.version.version_number)
+        compose_file = ComposeFile(self.compose_with_no_version)
+        self.assertIsNone(compose_file.version)
 
     def test_v2_version_present(self):
-        composeFile = ComposeFile(self.compose_with_version_2)
-        self.assertEqual(composeFile.version.version_number, "2.7")
+        compose_file = ComposeFile(self.compose_with_version_2)
+        self.assertEqual(compose_file.version, "2.7")
 
     def test_v3_version_present(self):
-        composeFile = ComposeFile(self.compose_with_version_3)
-        self.assertEqual(composeFile.version.version_number, "3.8")
+        compose_file = ComposeFile(self.compose_with_version_3)
+        self.assertEqual(compose_file.version, "3.8")
 
     def test_unknown_version_present(self):
-        composeFile = ComposeFile(self.compose_with_unknown_version)
-        self.assertEqual(composeFile.version.version_number, "100.1.alpha")
+        compose_file = ComposeFile(self.compose_with_unknown_version)
+        self.assertEqual(compose_file.version, "100.1.alpha")
 
 
 if __name__ == '__main__':

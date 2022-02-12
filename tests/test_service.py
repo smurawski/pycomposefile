@@ -54,18 +54,13 @@ services:
         compose_file = ComposeFile(self.compose_with_one_service_complex)
         self.assertEqual(compose_file.services["frontend"].container_name, "myfrontend")
 
-    def test_cpu_count_default_to_containerapps_default(self):
-        containerapps_default_cpu_count = 0.5
-        compose_file = ComposeFile(self.compose_with_one_service)
-        self.assertEqual(compose_file.services["frontend"].cpu_count, containerapps_default_cpu_count)
-
     def test_cpu_count_assigned_from_service(self):
         compose_file = ComposeFile(self.compose_with_one_service_complex)
         self.assertEqual(compose_file.services["frontend"].cpu_count, 1.5)
 
     def test_all_valid_keys_are_removed(self):
         compose_file = ComposeFile(self.compose_with_one_service)
-        self.assertEqual(compose_file.services["frontend"].unsupported_keys, [])
+        self.assertEqual(compose_file.services["frontend"].unsupported_elements, {})
 
 
 if __name__ == '__main__':

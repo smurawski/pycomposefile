@@ -1,15 +1,16 @@
 from .unsupported import UnsupportedConfiguration
+from .service_deploy import Deploy
+from .optional_element import ComposeElement
 
 
-class Service:
-    def __init__(self, container_name, service_entry):
-        self.image = service_entry.pop("image", None)
+class Service(ComposeElement):
+    supported_keys = ["cpu_count", "command"]
+
+    def __init__(self, container_name, service_config):
+        self.image = service_config.pop("image", None)
         if self.image == None:
             raise ValueError("An image is required for the conversion to ContainerApps.")
-        self.container_name = service_entry.pop("container_name", container_name)
-        self.cpu_count = service_entry.pop("cpu_count", 0.5)
+        self.container_name = service_config.pop("container_name", container_name)
+        self.deploy = Deploy.from_parsed_yaml(service_config.pop("deploy", None))
 
-        self.command = service_entry.pop("command", None)
-
-        # TODO replace with actionale reporting
-        self.unsupported_keys = list(service_entry.keys())
+        super().__init__(service_config)
