@@ -63,10 +63,5 @@ services:
         compose_file = ComposeFile(self.compose_with_one_service_complex)
         self.assertEqual(compose_file.services["frontend"].cpu_count, 1.5)
 
-    def test_all_valid_keys_are_removed(self):
-        compose_file = ComposeFile(self.compose_with_one_service)
-        self.assertEqual(compose_file.services["frontend"].unsupported_elements, {})
-
-
 if __name__ == '__main__':
     unittest.main()

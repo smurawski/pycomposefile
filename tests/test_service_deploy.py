@@ -1,8 +1,9 @@
 import unittest
 from pycompose import ComposeFile
+from pycompose.unsupported import UnsupportedConfiguration
 
 
-class TestComposeVersion(unittest.TestCase):
+class TestComposeServiceDeploy(unittest.TestCase):
     compose_with_no_deploy = """
 services:
   frontend:
@@ -19,6 +20,12 @@ services:
       mode: replicated
       replicas: 2
       endpoint_mode: vip
+      placement:
+        constraints:
+          - disktype=ssd
+      labels:
+        com.example.description: "This label will appear on the web service"
+        com.example.otherstuff: "random things"
 """
 
     compose_with_deploy_resources = """
@@ -50,6 +57,22 @@ services:
         deploy = compose_file.services["frontend"].deploy
         self.assertIsNotNone(deploy)
         self.assertEqual(deploy.endpoint_mode, "vip")
+
+    def test_service_with_deploy_labels(self):
+        compose_file = ComposeFile(self.compose_with_deploy)
+        deploy = compose_file.services["frontend"].deploy
+        expected = {
+            "com.example.description": "This label will appear on the web service",
+            "com.example.otherstuff": "random things"
+        }
+        self.assertDictEqual(deploy.labels, expected)
+
+    def test_service_with_unsupported_configuration_in_deploy(self):
+        compose_file = ComposeFile(self.compose_with_deploy)
+        deploy = compose_file.services["frontend"].deploy
+        self.assertIsInstance(deploy.placement, UnsupportedConfiguration)
+        self.assertEqual(str(deploy.placement),
+                         "Unable to specify placement constraints or preferences for placement at services/frontend/deploy")
 
     def test_service_with_deploy_resources(self):
         compose_file = ComposeFile(self.compose_with_deploy_resources)

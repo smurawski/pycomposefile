@@ -19,13 +19,20 @@ class ComposeElement:
             elif value is not None:
                 value = transform(self.replace_environment_variables(value))
             self.__setattr__(key, value)
-        self.unsupported_elements = config
+        for key in self.unsupported_keys.keys():
+            message, docs_url, spec_url = self.unsupported_keys[key]
+            value = UnsupportedConfiguration(key, message, docs_url, spec_url, compose_path)
+            self.__setattr__(key, value)
+        for key in config.keys():
+            if key not in self.unsupported_keys.keys():
+                pass
+                #raise Exception(f"Failed to map {key} in {compose_path}")
 
     def replace_environment_variables(self, value):
         value = str(value)
         environment_variables = self.environment_regex.findall(value)
         for match in environment_variables:
-            env_var = match.replace("$", "").replace("{", "").replace("}","")
+            env_var = match.replace("$", "").replace("{", "").replace("}", "")
             value = re.sub(f"\{match}", os.environ.get(env_var), value)
         return value
 
