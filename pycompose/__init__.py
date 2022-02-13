@@ -11,5 +11,10 @@ class ComposeFile:
             version = str(version)
         self.version = version
         self.services = {}
-        for service in deserialized_compose_file["services"]:
-            self.services[service] = Service(service, deserialized_compose_file["services"][service])
+        self.compose_path = "services"
+        for service in deserialized_compose_file["services"].keys():
+            self.services[service] = Service.from_parsed_yaml(
+                service,
+                deserialized_compose_file["services"][service],
+                self.compose_path
+            )

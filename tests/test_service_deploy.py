@@ -55,7 +55,12 @@ services:
         compose_file = ComposeFile(self.compose_with_deploy_resources)
         deploy = compose_file.services["frontend"].deploy
         self.assertIsNotNone(deploy)
-        self.assertEqual(deploy.resources.limits.cpus, "0.50")
+        self.assertEqual(deploy.resources.limits.cpus, 0.50)
+
+    def test_compose_path_for_service_with_deploy(self):
+        compose_file = ComposeFile(self.compose_with_deploy)
+        deploy = compose_file.services["frontend"].deploy
+        self.assertEqual(deploy.compose_path, "services/frontend/deploy")
 
 
 if __name__ == '__main__':

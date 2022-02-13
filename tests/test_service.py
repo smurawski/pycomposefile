@@ -42,13 +42,18 @@ services:
         compose_file = ComposeFile(self.compose_with_one_service)
         self.assertIsNotNone(compose_file.services["frontend"])
 
+    def test_compose_path_matches_name_with_one_service(self):
+        compose_file = ComposeFile(self.compose_with_one_service)
+        self.assertEqual(compose_file.services["frontend"].compose_path, 'services/frontend')
+
     def test_names_match_with_two_services(self):
         compose_file = ComposeFile(self.compose_with_two_services)
         self.assertEqual(list(compose_file.services.keys()), ["frontend", "backend"])
 
-    def test_container_name_default_from_service_name(self):
-        compose_file = ComposeFile(self.compose_with_one_service)
-        self.assertEqual(compose_file.services["frontend"].container_name, "frontend")
+    def test_compose_paths_matches_name_with_two_services(self):
+        compose_file = ComposeFile(self.compose_with_two_services)
+        self.assertEqual(compose_file.services["frontend"].compose_path, 'services/frontend')
+        self.assertEqual(compose_file.services["backend"].compose_path, 'services/backend')
 
     def test_container_name_assigned_from_service(self):
         compose_file = ComposeFile(self.compose_with_one_service_complex)
