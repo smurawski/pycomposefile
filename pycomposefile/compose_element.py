@@ -1,4 +1,3 @@
-from sqlite3 import complete_statement
 from .unsupported import UnsupportedConfiguration
 import re
 import os
@@ -7,7 +6,6 @@ import os
 class ComposeElement:
     supported_keys = {}
     unsupported_keys = {}
-    environment_regex = re.compile("\${?\w+}?")
 
     def __init__(self, config, compose_path=""):
         self.compose_path = compose_path
@@ -26,14 +24,15 @@ class ComposeElement:
         for key in config.keys():
             if key not in self.unsupported_keys.keys():
                 pass
-                #raise Exception(f"Failed to map {key} in {compose_path}")
+                # raise Exception(f"Failed to map {key} in {compose_path}")
 
     def replace_environment_variables(self, value):
+        environment_regex = re.compile(r"\${?\w+}?")
         value = str(value)
-        environment_variables = self.environment_regex.findall(value)
+        environment_variables = environment_regex.findall(value)
         for match in environment_variables:
             env_var = match.replace("$", "").replace("{", "").replace("}", "")
-            value = re.sub(f"\{match}", os.environ.get(env_var), value)
+            value = re.sub(f"\\{match}", os.environ.get(env_var), value)
         return value
 
     @classmethod

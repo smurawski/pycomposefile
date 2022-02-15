@@ -1,6 +1,6 @@
 import unittest
-from pycompose import ComposeFile
-from pycompose.unsupported import UnsupportedConfiguration
+from pycomposefile import ComposeFile
+from pycomposefile.unsupported import UnsupportedConfiguration
 
 
 class TestComposeServiceDeploy(unittest.TestCase):

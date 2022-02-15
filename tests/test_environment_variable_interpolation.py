@@ -1,5 +1,5 @@
 import unittest
-from pycompose import ComposeFile
+from pycomposefile import ComposeFile
 import os
 
 

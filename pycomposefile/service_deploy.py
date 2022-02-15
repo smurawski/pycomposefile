@@ -1,8 +1,5 @@
 from decimal import Decimal
-
-from pycompose import unsupported
-
-from .optional_element import ComposeElement
+from .compose_element import ComposeElement
 
 
 class ResourceDetails(ComposeElement):
