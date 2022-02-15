@@ -27,12 +27,54 @@ class ComposeElement:
                 # raise Exception(f"Failed to map {key} in {compose_path}")
 
     def replace_environment_variables(self, value):
-        environment_regex = re.compile(r"\${?\w+}?")
         value = str(value)
-        environment_variables = environment_regex.findall(value)
-        for match in environment_variables:
-            env_var = match.replace("$", "").replace("{", "").replace("}", "")
-            value = re.sub(f"\\{match}", os.environ.get(env_var), value)
+        value = self.replace_environment_variables_with_empty_unset(value)
+        value = self.replace_environment_variables_with_unset(value)
+        value = self.replace_environment_variables_with_braces(value)
+        value = self.replace_environment_variables_without_braces(value)
+
+        return value
+
+    def replace_environment_variables_with_empty_unset(self, value):
+        capture = re.compile(r"\$\{(?P<variablename>\w+)\:-(?P<defaultvalue>\w+)\}")
+        matches = capture.search(value)
+        while matches:
+            env_var = os.environ.get(matches.group("variablename"))
+            default_value = matches.group("defaultvalue")
+            if env_var is None or len(env_var) == 0:
+                env_var = default_value
+            value = re.sub(f"\\{matches[0]}", env_var, value)
+            matches = capture.search(value)
+        return value
+
+    def replace_environment_variables_with_unset(self, value):
+        capture = re.compile(r"\$\{(?P<variablename>\w+)-(?P<defaultvalue>\w+)\}")
+        matches = capture.search(value)
+        while matches:
+            env_var = os.environ.get(matches.group("variablename"))
+            default_value = matches.group("defaultvalue")
+            if env_var is None:
+                env_var = default_value
+            value = re.sub(f"{matches[0]}", env_var, value)
+            matches = capture.search(value)
+        return value
+
+    def replace_environment_variables_with_braces(self, value):
+        capture = re.compile(r"\$\{(?P<variablename>\w+)\}")
+        matches = capture.search(value)
+        while matches:
+            env_var = os.environ.get(matches.group("variablename"))
+            value = re.sub(f"\\{matches[0]}", env_var, value)
+            matches = capture.search(value)
+        return value
+
+    def replace_environment_variables_without_braces(self, value):
+        capture = re.compile(r"\$(?P<variablename>\w+)")
+        matches = capture.search(value)
+        while matches:
+            env_var = os.environ.get(matches.group("variablename"))
+            value = re.sub(f"\\{matches[0]}", env_var, value)
+            matches = capture.search(value)
         return value
 
     @classmethod

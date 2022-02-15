@@ -9,5 +9,7 @@ class Service(ComposeElement):
         "container_name": str,
         "cpu_count": Decimal,
         "command": str,
-        "deploy": Deploy.from_parsed_yaml
+        "deploy": Deploy.from_parsed_yaml,
+        "ports": str
     }
+
