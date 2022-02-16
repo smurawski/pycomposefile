@@ -58,6 +58,7 @@ services:
         compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
         deploy = compose_file.services["frontend"].deploy
         self.assertIsNotNone(deploy.rollback_config)
+        self.assertEqual(deploy.rollback_config.monitor, "5m")
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 from decimal import Decimal
 from .compose_element import ComposeElement
+import re
 
 
 class ResourceDetails(ComposeElement):
@@ -32,12 +33,25 @@ class Labels(dict):
         return instance
 
 
-class RollbackConfig(ComposeElement):
-    pass
+class DeployTimespan(str):
+
+    @classmethod
+    def from_parsed_str(cls, value):
+        timespan_validator = re.compile(r"\d+(ns|us|ms|s|m|h)")
+        if not timespan_validator.match(value):
+            value = "0s"
+        return cls(value)
 
 
 class UpdateConfig(ComposeElement):
-    pass
+    supported_keys = {
+        "parallelism": int,
+        "delay": DeployTimespan.from_parsed_str,
+        "failure_action": str,
+        "monitor": DeployTimespan.from_parsed_str,
+        "max_failure_ratio": str,
+        "order": str
+    }
 
 
 class Deploy(ComposeElement):
@@ -47,7 +61,7 @@ class Deploy(ComposeElement):
         "mode": str,
         "replicas": int,
         "resources": Resources.from_parsed_yaml,
-        "rollback_config": RollbackConfig.from_parsed_yaml,
+        "rollback_config": UpdateConfig.from_parsed_yaml,
         "update_config": UpdateConfig.from_parsed_yaml
     }
 

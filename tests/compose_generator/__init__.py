@@ -61,6 +61,7 @@ services:
         com.example.otherstuff: "random things"
       rollback_config:
         order: stop-first
+        monitor: 5m
       update_config:
         order: stop-first
 """
