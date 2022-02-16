@@ -12,7 +12,8 @@ class Service(ComposeElement):
         "deploy": Deploy.from_parsed_yaml,
         "ports": str,
         "cpus": Decimal,
-        "credential_spec": CredentialSpec.from_parsed_yaml,
+        # TODO: Implement CredentialSpec
+        # "credential_spec": CredentialSpec.from_parsed_yaml,
     }
 
     unsupported_keys = {
