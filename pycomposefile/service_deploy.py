@@ -32,17 +32,30 @@ class Labels(dict):
         return instance
 
 
+class RollbackConfig(ComposeElement):
+    pass
+
+
+class UpdateConfig(ComposeElement):
+    pass
+
+
 class Deploy(ComposeElement):
     supported_keys = {
         "endpoint_mode": str,
         "labels": Labels.from_parsed_yaml,
         "mode": str,
         "replicas": int,
-        "resources": Resources.from_parsed_yaml
+        "resources": Resources.from_parsed_yaml,
+        "rollback_config": RollbackConfig.from_parsed_yaml,
+        "update_config": UpdateConfig.from_parsed_yaml
     }
 
     unsupported_keys = {
         "placement": ("Unable to specify placement constraints or preferences",
                       "https://docs.microsoft.com/azure/container-apps/containers",
-                      "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#placement")
+                      "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#placement"),
+        "restart_policy": ("Restart conditions are not configurable",
+                           "https://docs.microsoft.com/azure/container-apps/containers",
+                           "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#restart_policy")
     }
