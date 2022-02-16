@@ -15,7 +15,11 @@ class ComposeElement:
             if isinstance(value, dict):
                 value = transform(key, value, compose_path)
             elif value is not None:
-                value = transform(self.replace_environment_variables(value))
+                if type(transform) is tuple:
+                    transform, valid_values = transform
+                    value = self.transform_incoming_data(value, transform, valid_values)
+                else:
+                    value = self.transform_incoming_data(value, transform)
             self.__setattr__(key, value)
         for key in self.unsupported_keys.keys():
             message, docs_url, spec_url = self.unsupported_keys[key]
@@ -25,6 +29,15 @@ class ComposeElement:
             if key not in self.unsupported_keys.keys():
                 pass
                 # raise Exception(f"Failed to map {key} in {compose_path}")
+
+    def transform_incoming_data(self, value, data_transformer, valid_values=[]):
+        # TODO: if the data is an integer or decimal, should there be a "between" check?
+        transformed = data_transformer(self.replace_environment_variables(value))
+        if len(valid_values) > 0 and transformed not in valid_values:
+            # TODO: Should this return None or should this raise?
+            return None
+        else:
+            return transformed
 
     def replace_environment_variables(self, value):
         value = str(value)

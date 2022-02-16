@@ -39,6 +39,7 @@ class DeployTimespan(str):
     def from_parsed_str(cls, value):
         timespan_validator = re.compile(r"\d+(ns|us|ms|s|m|h)")
         if not timespan_validator.match(value):
+            # Should this default like it is currently or should it raise an error?
             value = "0s"
         return cls(value)
 
@@ -47,18 +48,20 @@ class UpdateConfig(ComposeElement):
     supported_keys = {
         "parallelism": int,
         "delay": DeployTimespan.from_parsed_str,
-        "failure_action": str,
+        "failure_action": (str, ["continue", "pause", "rollback"]),
         "monitor": DeployTimespan.from_parsed_str,
+        # TODO: find an example, not sure what this value looks like
+        #  https://github.com/compose-spec/compose-spec/blob/master/deploy.md#update_config
         "max_failure_ratio": str,
-        "order": str
+        "order": (str, ["stop-first", "start-first"])
     }
 
 
 class Deploy(ComposeElement):
     supported_keys = {
-        "endpoint_mode": str,
+        "endpoint_mode": (str, ["vip", "dnsrr"]),
         "labels": Labels.from_parsed_yaml,
-        "mode": str,
+        "mode": (str, ["global", "replicated"]),
         "replicas": int,
         "resources": Resources.from_parsed_yaml,
         "rollback_config": UpdateConfig.from_parsed_yaml,

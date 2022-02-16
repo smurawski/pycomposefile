@@ -63,6 +63,7 @@ services:
         order: stop-first
         monitor: 5m
       update_config:
-        order: stop-first
+        order: start-first
+        failure_action: rollback
 """
         return ComposeFile(compose)
