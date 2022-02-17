@@ -1,5 +1,6 @@
 from decimal import Decimal
 from .service_deploy import Deploy
+from .service_credential_spec import CredentialSpec
 from .compose_element import ComposeElement
 
 
@@ -12,8 +13,7 @@ class Service(ComposeElement):
         "deploy": Deploy.from_parsed_yaml,
         "ports": str,
         "cpus": Decimal,
-        # TODO: Implement CredentialSpec
-        # "credential_spec": CredentialSpec.from_parsed_yaml,
+        "credential_spec": CredentialSpec.from_parsed_yaml,
     }
 
     unsupported_keys = {
