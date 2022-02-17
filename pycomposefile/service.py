@@ -53,7 +53,7 @@ class Service(ComposeElement):
         "cgroup_parent": ("cgroup configuration is not supported by Azure ContainerApps",
                           "",
                           "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cgroup_parent"),
-        "configs": ("Configs exposed through the filesystem are not supported by Azure ContainerApps. Environment variables and secrets can be used"
+        "configs": ("Configs exposed through the filesystem are not supported by Azure ContainerApps. Environment variables and secrets can be used",
                     "https://docs.microsoft.com/en-us/azure/container-apps/secure-app?tabs=arm-template#using-secrets",
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#configs"),
     }
