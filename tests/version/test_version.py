@@ -1,5 +1,5 @@
 import unittest
-from pycomposefile import ComposeFile
+from ..compose_generator import ComposeGenerator
 
 
 class TestComposeVersion(unittest.TestCase):
@@ -67,19 +67,19 @@ services:
 """
 
     def test_no_version_present(self):
-        compose_file = ComposeFile(self.compose_with_no_version)
+        compose_file = ComposeGenerator.convert_yaml_to_compose_file(self.compose_with_no_version)
         self.assertIsNone(compose_file.version)
 
     def test_v2_version_present(self):
-        compose_file = ComposeFile(self.compose_with_version_2)
+        compose_file = ComposeGenerator.convert_yaml_to_compose_file(self.compose_with_version_2)
         self.assertEqual(compose_file.version, "2.7")
 
     def test_v3_version_present(self):
-        compose_file = ComposeFile(self.compose_with_version_3)
+        compose_file = ComposeGenerator.convert_yaml_to_compose_file(self.compose_with_version_3)
         self.assertEqual(compose_file.version, "3.8")
 
     def test_unknown_version_present(self):
-        compose_file = ComposeFile(self.compose_with_unknown_version)
+        compose_file = ComposeGenerator.convert_yaml_to_compose_file(self.compose_with_unknown_version)
         self.assertEqual(compose_file.version, "100.1.alpha")
 
 

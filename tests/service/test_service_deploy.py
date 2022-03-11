@@ -1,8 +1,7 @@
 import unittest
 from pycomposefile import ComposeFile
 from pycomposefile.unsupported import UnsupportedConfiguration
-from compose_generator import ComposeGenerator
-from tests import compose_generator
+from ..compose_generator import ComposeGenerator
 
 
 class TestComposeServiceDeploy(unittest.TestCase):
@@ -13,7 +12,7 @@ services:
 """
 
     def test_service_with_no_deploy(self):
-        compose_file = ComposeFile(self.compose_with_no_deploy)
+        compose_file = ComposeGenerator.convert_yaml_to_compose_file(self.compose_with_no_deploy)
         self.assertIsNone(compose_file.services["frontend"].deploy)
 
     def test_service_with_deploy(self):

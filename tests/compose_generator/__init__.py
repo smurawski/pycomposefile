@@ -1,7 +1,14 @@
+
 from pycomposefile import ComposeFile
+import yaml
 
 
 class ComposeGenerator:
+
+    @staticmethod
+    def convert_yaml_to_compose_file(yaml_string):
+        compose_yaml = yaml.load(yaml_string, Loader=yaml.Loader)
+        return ComposeFile(compose_yaml)
 
     @staticmethod
     def get_compose_with_string_value(variable_name):
@@ -10,7 +17,7 @@ services:
   frontend:
     image: awesome/${replace_me}
 """
-        return ComposeFile(compose.format(replace_me=variable_name))
+        return ComposeGenerator.convert_yaml_to_compose_file(compose.format(replace_me=variable_name))
 
     @staticmethod
     def get_compose_with_decimal_value(variable_name):
@@ -20,7 +27,7 @@ services:
     image: awesome/website
     cpu_count: ${replace_me}
 """
-        return ComposeFile(compose.format(replace_me=variable_name))
+        return ComposeGenerator.convert_yaml_to_compose_file(compose.format(replace_me=variable_name))
 
     @staticmethod
     def get_with_two_environment_variables_in_string_value(first_variable_name, second_variable_name):
@@ -31,7 +38,7 @@ services:
     cpu_count: 1.5
     ports: "${replace_first}:${replace_second}"
 """
-        return ComposeFile(compose.format(replace_first=first_variable_name, replace_second=second_variable_name))
+        return ComposeGenerator.convert_yaml_to_compose_file(compose.format(replace_first=first_variable_name, replace_second=second_variable_name))
 
     @staticmethod
     def get_compose_with_one_service_with_deploy():
@@ -66,4 +73,4 @@ services:
         order: start-first
         failure_action: rollback
 """
-        return ComposeFile(compose)
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)

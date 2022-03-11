@@ -1,6 +1,6 @@
 import unittest
 import os
-from compose_generator import ComposeGenerator
+from ..compose_generator import ComposeGenerator
 
 
 class TestBracesNoUnderscoreNoDigitVariableInterpolation(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(unittest.TestCase):
 
     def test_uppercase_with_default_when_unset_in_string_value(self):
         env_var = "DEFAULTUNSET"
-        os.environ.unsetenv(env_var)
+        os.unsetenv(env_var)
         braced_env_with_default_unset = "{" + env_var + ":-bob}"
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/bob")
@@ -45,7 +45,7 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(unittest.TestCase):
 
     def test_lowercase_with_default_when_unset_in_string_value(self):
         env_var = "defaultunset"
-        os.environ.unsetenv(env_var)
+        os.unsetenv(env_var)
         braced_env_with_default_unset = "{" + env_var + ":-bob}"
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/bob")
