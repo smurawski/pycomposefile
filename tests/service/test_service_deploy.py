@@ -1,7 +1,7 @@
 import unittest
 from pycomposefile import ComposeFile
 from pycomposefile.unsupported import UnsupportedConfiguration
-from ..compose_generator import ComposeGenerator
+from tests.compose_generator import ComposeGenerator
 
 
 class TestComposeServiceDeploy(unittest.TestCase):
