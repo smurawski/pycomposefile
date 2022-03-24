@@ -5,7 +5,7 @@ required = ['pyyaml']  # Comma seperated dependent libraries name
 
 setuptools.setup(
     name="pycomposefile",
-    version="0.0.1",
+    version="0.0.1a1",
     author="Steven Murawski",
     author_email="steven.murawski@microsoft.com",
     license="MIT",
