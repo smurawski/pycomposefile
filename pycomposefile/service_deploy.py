@@ -1,22 +1,23 @@
 from decimal import Decimal
+
+from pycomposefile import elements
 from .compose_element import ComposeElement
 import re
 
 
 class ResourceDetails(ComposeElement):
-    supported_keys = {"cpus": Decimal, "memory": str}
-    unsupported_keys = {
-        "pids": ("Unable to configure PID limits",
-                 "",
+    elements = {
+        "cpus": (Decimal, ""),
+        "memory": (str, ""),
+        "pids": (None,
                  "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#pids"),
-        "devices": ("Device configuration is unavailable in Azure ContainerApps",
-                    "",
+        "devices": (None,
                     "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#devices"),
     }
 
 
 class Resources(ComposeElement):
-    supported_keys = {
+    elements = {
         "limits": ResourceDetails.from_parsed_yaml,
         "reservations": ResourceDetails.from_parsed_yaml
     }
@@ -45,7 +46,7 @@ class DeployTimespan(str):
 
 
 class UpdateConfig(ComposeElement):
-    supported_keys = {
+    elements = {
         "parallelism": int,
         "delay": DeployTimespan.from_parsed_str,
         "failure_action": (str, ["continue", "pause", "rollback"]),
@@ -58,21 +59,16 @@ class UpdateConfig(ComposeElement):
 
 
 class Deploy(ComposeElement):
-    supported_keys = {
-        "endpoint_mode": (str, ["vip", "dnsrr"]),
-        "labels": Labels.from_parsed_yaml,
-        "mode": (str, ["global", "replicated"]),
-        "replicas": int,
-        "resources": Resources.from_parsed_yaml,
-        "rollback_config": UpdateConfig.from_parsed_yaml,
-        "update_config": UpdateConfig.from_parsed_yaml
-    }
-
-    unsupported_keys = {
-        "placement": ("Unable to specify placement constraints or preferences",
-                      "https://docs.microsoft.com/azure/container-apps/containers",
+    elements = {
+        "endpoint_mode": ((str, ["vip", "dnsrr"]), ""),
+        "labels": (Labels.from_parsed_yaml, ""),
+        "mode": ((str, ["global", "replicated"]), ""),
+        "replicas": (int, ""),
+        "resources": (Resources.from_parsed_yaml, ""),
+        "rollback_config": (UpdateConfig.from_parsed_yaml, ""),
+        "update_config": (UpdateConfig.from_parsed_yaml, ""),
+        "placement": (None,
                       "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#placement"),
-        "restart_policy": ("Restart conditions are not configurable",
-                           "https://docs.microsoft.com/azure/container-apps/containers",
-                           "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#restart_policy")
+        "restart_policy": (None,
+                           "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#restart_policy"),
     }

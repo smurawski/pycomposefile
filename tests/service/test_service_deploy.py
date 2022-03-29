@@ -1,6 +1,5 @@
 import unittest
 from pycomposefile import ComposeFile
-from pycomposefile.unsupported import UnsupportedConfiguration
 from tests.compose_generator import ComposeGenerator
 
 
@@ -30,12 +29,6 @@ services:
         }
         self.assertDictEqual(deploy.labels, expected)
 
-    def test_service_with_unsupported_configuration_in_deploy(self):
-        compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
-        deploy = compose_file.services["frontend"].deploy
-        self.assertIsInstance(deploy.placement, UnsupportedConfiguration)
-        self.assertEqual(str(deploy.placement),
-                         "Unable to specify placement constraints or preferences for placement at services/frontend/deploy")
 
     def test_service_with_deploy_resources(self):
         compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
