@@ -6,9 +6,5 @@
         "-p",
         "test*.py"
     ],
-    "python.testing.unittestEnabled": true,
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.terminal.activateEnvInCurrentTerminal": true,
-    "python.defaultInterpreterPath": "python"
+    
 }
