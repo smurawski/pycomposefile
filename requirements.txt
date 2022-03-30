@@ -5,3 +5,4 @@ pyyaml>=6.0
 twine>=3.8
 build>=0.7
 pyyaml>=6.0
+flake8==4.0.1

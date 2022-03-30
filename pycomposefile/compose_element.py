@@ -9,7 +9,10 @@ class ComposeElement:
         for key in self.elements.keys():
             transform, spec_url = self.elements[key]
             config_value = config.pop(key, None)
-            element = Element(key, transform, config_value, spec_url, self.compose_path)
+            if config_value is not None:
+                element = Element(key, transform, config_value, spec_url, self.compose_path)
+            else:
+                element = config_value
             self.__setattr__(key, element)
         for key in config.keys():
             # raise Exception(f"Failed to map {key} in {compose_path}")

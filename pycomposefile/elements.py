@@ -12,10 +12,25 @@ class Element():
         self.config_value = config_value
         self.transform_value()
 
-    def __repr__(self) -> str:
+    def __eq__(self, other):
+        return self.__repr__().__eq__(other)
+
+    def __str__(self) -> str:
         return self.resolved_value
 
+    def __repr__(self):
+        return self.resolved_value
+
+    def __getattr__(self, name):
+        return self.resolved_value.__getattribute__(name)
+
+    def __getitem__(self, item):
+        return self.resolved_value.__getitem__(item)
+
     def transform_value(self):
+        if self.transform is None:
+            self.resolved_value = None
+            return
         if isinstance(self.config_value, dict):
             self.resolved_value = self.transform(self.element_name, self.config_value, self.compose_path)
         elif self.config_value is not None:

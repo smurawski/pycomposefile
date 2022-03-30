@@ -18,8 +18,8 @@ class ResourceDetails(ComposeElement):
 
 class Resources(ComposeElement):
     elements = {
-        "limits": ResourceDetails.from_parsed_yaml,
-        "reservations": ResourceDetails.from_parsed_yaml
+        "limits": (ResourceDetails.from_parsed_yaml, ""),
+        "reservations": (ResourceDetails.from_parsed_yaml, ""),
     }
 
 
@@ -47,14 +47,14 @@ class DeployTimespan(str):
 
 class UpdateConfig(ComposeElement):
     elements = {
-        "parallelism": int,
-        "delay": DeployTimespan.from_parsed_str,
-        "failure_action": (str, ["continue", "pause", "rollback"]),
-        "monitor": DeployTimespan.from_parsed_str,
+        "parallelism": (int, ""),
+        "delay": (DeployTimespan.from_parsed_str, ""),
+        "failure_action": ((str, ["continue", "pause", "rollback"]), ""),
+        "monitor": (DeployTimespan.from_parsed_str, ""),
         # TODO: find an example, not sure what this value looks like
         #  https://github.com/compose-spec/compose-spec/blob/master/deploy.md#update_config
-        "max_failure_ratio": str,
-        "order": (str, ["stop-first", "start-first"])
+        "max_failure_ratio": (str, ""),
+        "order": ((str, ["stop-first", "start-first"]), ""),
     }
 
 

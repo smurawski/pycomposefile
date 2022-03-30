@@ -23,12 +23,10 @@ services:
     def test_service_with_deploy_labels(self):
         compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
         deploy = compose_file.services["frontend"].deploy
-        expected = {
-            "com.example.description": "This label will appear on the web service",
-            "com.example.otherstuff": "random things"
-        }
-        self.assertDictEqual(deploy.labels, expected)
-
+        self.assertIn("com.example.description", deploy.labels.keys())
+        self.assertIn("com.example.otherstuff", deploy.labels.keys())
+        self.assertEqual(deploy.labels["com.example.description"], "This label will appear on the web service")
+        self.assertEqual(deploy.labels["com.example.otherstuff"], "random things")
 
     def test_service_with_deploy_resources(self):
         compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
