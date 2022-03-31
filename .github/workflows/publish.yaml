@@ -23,12 +23,13 @@ jobs:
 
       - name: Build a binary wheel and a source tarball
         run: |
-          cd source
+          cd src
           python -m build --sdist --wheel --outdir dist/ .
 
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          packages_dir: src/dist/
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
@@ -36,5 +37,6 @@ jobs:
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          packages_dir: src/dist/
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
