@@ -25,6 +25,8 @@ jobs:
         run: |
           cd src
           python -m build --sdist --wheel --outdir dist/ .
+        env:
+          BUILD_TAG: ${{ github.ref_name }}
 
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

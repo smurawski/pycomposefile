@@ -54,6 +54,3 @@ jobs:
         run: |
           cd src
           python -m build --sdist --wheel --outdir dist/ .
-        env:
-          BUILD_TAG: ${{ github.ref_name }}
-
