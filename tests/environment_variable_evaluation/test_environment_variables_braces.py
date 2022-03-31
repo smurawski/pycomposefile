@@ -1,6 +1,6 @@
 import unittest
 import os
-from ..compose_generator import ComposeGenerator
+from tests.compose_generator import ComposeGenerator
 
 
 class TestBracesNoUnderscoreNoDigitVariableInterpolation(unittest.TestCase):

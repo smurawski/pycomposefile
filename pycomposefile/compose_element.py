@@ -1,35 +1,30 @@
-from .unsupported import UnsupportedConfiguration
 import re
 import os
 
 
 class ComposeElement:
-    supported_keys = {}
-    unsupported_keys = {}
+    element_keys = {}
 
     def __init__(self, config, compose_path=""):
         self.compose_path = compose_path
-        for key in self.supported_keys.keys():
-            self.set_supported_property_from_config(config, compose_path, key)
-        for key in self.unsupported_keys.keys():
-            self.set_unsupported_property_from_config(compose_path, key)
+        for key in self.element_keys.keys():
+            config_element = config.pop(key, None)
+            key_config = self.element_keys[key]
+            self.set_supported_property_from_config(key, key_config, config_element, compose_path, )
         for key in config.keys():
-            if key not in self.unsupported_keys.keys():
-                # raise Exception(f"Failed to map {key} in {compose_path}")
-                pass
+            # raise Exception(f"Failed to map {key} in {compose_path}")
+            pass
 
-    def set_unsupported_property_from_config(self, compose_path, key):
-        message, docs_url, spec_url = self.unsupported_keys[key]
-        value = UnsupportedConfiguration(key, message, docs_url, spec_url, compose_path)
-        self.__setattr__(key, value)
-
-    def set_supported_property_from_config(self, config, compose_path, key):
-        value = config.pop(key, None)
-        transform = self.supported_keys[key]
-        if isinstance(value, dict):
-            value = transform(key, value, compose_path)
-        elif value is not None:
-            value = self.transform_supported_data(value, transform)
+    def set_supported_property_from_config(self, key, key_config, value, compose_path):
+        transform = key_config[0]
+        if transform is not None:
+            if isinstance(value, dict):
+                value = transform(key, value, compose_path)
+            elif value is not None:
+                value = self.transform_supported_data(value, transform)
+        else:
+            # TODO: Logging message if value was not None
+            value = None
         self.__setattr__(key, value)
 
     def transform_supported_data(self, value, transform):
