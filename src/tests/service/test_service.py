@@ -63,6 +63,14 @@ services:
         compose_file = ComposeGenerator.convert_yaml_to_compose_file(self.compose_with_one_service_complex)
         self.assertEqual(compose_file.services["frontend"].cpu_count, 1.5)
 
+    def test_expose_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
+        self.assertIn(3000, compose_file.services["frontend"].expose)
+
+    def test_multiple_expose_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_one_service_with_multiple_expose()
+        self.assertEqual(compose_file.services["frontend"].expose, [3000, 4000])
+
 
 if __name__ == '__main__':
     unittest.main()

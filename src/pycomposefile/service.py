@@ -4,6 +4,19 @@ from .service_credential_spec import CredentialSpec
 from .compose_element import ComposeElement
 
 
+class Expose(list):
+
+    @classmethod
+    def from_parsed_yaml(cls, value):
+        return_value = None
+        if type(value) is str:
+            return_value = list()
+            value = value.strip("[]").split(',')
+            for v in value:
+                return_value.append(int(v.rstrip().lstrip()))
+        return return_value
+
+
 class Service(ComposeElement):
     element_keys = {
         "image": (str, ""),
@@ -11,6 +24,7 @@ class Service(ComposeElement):
         "cpu_count": (Decimal, ""),
         "command": (str, ""),
         "deploy": (Deploy.from_parsed_yaml, ""),
+        "expose": (Expose.from_parsed_yaml, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#expose"),  # https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
         "ports": (str, ""),
         "cpus": (Decimal, ""),
         "credential_spec": (CredentialSpec.from_parsed_yaml, ""),

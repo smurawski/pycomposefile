@@ -48,6 +48,7 @@ services:
     image: awesome/webapp
     ports:
       - "8080:80"
+    expose: 3000
     deploy:
       mode: replicated
       replicas: 2
@@ -72,5 +73,20 @@ services:
       update_config:
         order: start-first
         failure_action: rollback
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+
+    @staticmethod
+    def get_compose_with_one_service_with_multiple_expose():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    ports:
+      - "8080:80"
+    expose: 
+      - 3000
+      - 4000
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
