@@ -1,5 +1,5 @@
 # GitHub CI build pipeline
-name: Awesome Calculator CI build
+name: Pycomposefile CI build
 
 on:
   push:
@@ -50,24 +50,10 @@ jobs:
           coverage report
           coverage html
 
-      - name: Archive code coverage html report
-        if: startsWith(github.ref_name, 'v')
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage-report
-          path: src/htmlcov
-
       - name: Run package creation
-        if: startsWith(github.ref_name, 'v')
         run: |
           cd src
-          python -m build
+          python -m build --sdist --wheel --outdir dist/ .
         env:
           BUILD_TAG: ${{ github.ref_name }}
 
-      - name: Archive package
-        if: startsWith(github.ref_name, 'v')
-        uses: actions/upload-artifact@v2
-        with:
-          name: awesome-calculator
-          path: src/dist
