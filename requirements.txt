@@ -5,3 +5,4 @@ pyyaml>=6.0
 twine>=3.8
 build>=0.7
 flake8==4.0.1
+pylint==2.13.4

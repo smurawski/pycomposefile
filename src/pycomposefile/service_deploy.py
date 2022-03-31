@@ -51,7 +51,7 @@ class UpdateConfig(ComposeElement):
         "monitor": (DeployTimespan.from_parsed_str, ""),
         # TODO: find an example, not sure what this value looks like
         #  https://github.com/compose-spec/compose-spec/blob/master/deploy.md#update_config
-        "max_failure_ratio": (str, ""), 
+        "max_failure_ratio": (str, ""),
         "order": ((str, ["stop-first", "start-first"]), ""),
     }
 
