@@ -12,6 +12,7 @@ class Service(ComposeElement):
         "command": str,
         "deploy": Deploy.from_parsed_yaml,
         "ports": str,
+        "expose": str,
         "cpus": Decimal,
         "credential_spec": CredentialSpec.from_parsed_yaml,
     }
