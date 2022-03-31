@@ -1,6 +1,5 @@
 import unittest
 from pycomposefile import ComposeFile
-from pycomposefile.unsupported import UnsupportedConfiguration
 from tests.compose_generator import ComposeGenerator
 
 
