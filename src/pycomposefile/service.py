@@ -13,7 +13,7 @@ class Expose(list):
             return_value = list()
             value = value.strip("[]").split(',')
             for v in value:
-                return_value.append(int(v.rstrip().lstrip()))
+                return_value.append(int(v.rstrip().lstrip().strip("'")))
         return return_value
 
 

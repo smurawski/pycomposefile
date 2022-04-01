@@ -48,7 +48,7 @@ services:
     image: awesome/webapp
     ports:
       - "8080:80"
-    expose: 3000
+    expose: "3000"
     deploy:
       mode: replicated
       replicas: 2
@@ -76,7 +76,6 @@ services:
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
 
-
     @staticmethod
     def get_compose_with_one_service_with_multiple_expose():
         compose = """
@@ -85,8 +84,9 @@ services:
     image: awesome/webapp
     ports:
       - "8080:80"
-    expose: 
+    expose:
       - 3000
-      - 4000
+      - "4000"
+      - '5000'
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
