@@ -10,7 +10,7 @@ class ComposeElement:
         for key in self.element_keys.keys():
             config_element = config.pop(key, None)
             key_config = self.element_keys[key]
-            self.set_supported_property_from_config(key, key_config, config_element, compose_path, )
+            self.set_supported_property_from_config(key, key_config, config_element, compose_path)
         for key in config.keys():
             # raise Exception(f"Failed to map {key} in {compose_path}")
             pass
@@ -19,7 +19,9 @@ class ComposeElement:
         transform = key_config[0]
         if transform is not None:
             if isinstance(value, dict):
-                value = transform(key, value, compose_path)
+                value = transform(value, key, compose_path)
+            elif isinstance(value, list):
+                value = transform(value, key, compose_path)
             elif value is not None:
                 value = self.transform_supported_data(value, transform)
         else:
@@ -38,7 +40,9 @@ class ComposeElement:
     def transform_and_validate_supported_data(self, value, data_transformer, valid_values):
         # TODO: if the data is an integer or decimal, should there be a "between" check?
         transformed = data_transformer(self.replace_environment_variables(value))
-        if transformed not in valid_values:
+        if isinstance(transformed, int) and valid_values[0] <= transformed <= valid_values[1]:
+            return transformed
+        elif transformed not in valid_values:
             # TODO: Should this return None or should this raise?
             return None
         else:
@@ -96,8 +100,32 @@ class ComposeElement:
         return value
 
     @classmethod
-    def from_parsed_yaml(cls, name, config, compose_path):
+    def from_parsed_yaml(cls, config, name, compose_path):
         if config is None:
             return None
         compose_path = f"{compose_path}/{name}"
         return cls(config, compose_path)
+
+
+class ComposeStringOrListElement(list):
+    data_type = None
+
+    def __init__(self, config, key=None, compose_path=None,):
+        if compose_path is not None:
+            self.compose_path = f"{compose_path}/{key}"
+
+        if isinstance(config, list):
+            for v in config:
+                if isinstance(v, str):
+                    v = v.strip("[]").rstrip().lstrip().strip("'")
+                    self.append_data_type(v)
+                else:
+                    self.append_data_type(v, key, compose_path)
+        else:
+            self.append_data_type(config, key, compose_path)
+
+    def append_data_type(self, config_value, key=None, compose_path=None):
+        if isinstance(config_value, str) or isinstance(config_value, int):
+            self.append(self.data_type(config_value))
+        else:
+            self.append(self.data_type(config_value, key, compose_path))

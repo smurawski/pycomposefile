@@ -23,7 +23,7 @@ class TestNoBraceNoUnderscoreNoDigitEnvironmentVariable(unittest.TestCase):
         os.environ[first_env_var] = "8080"
         os.environ[second_env_var] = "80"
         compose_file = ComposeGenerator.get_with_two_environment_variables_in_string_value(first_env_var, second_env_var)
-        self.assertEqual(compose_file.services["frontend"].ports, "8080:80")
+        self.assertEqual(compose_file.services["frontend"].ports[0], "8080:80")
 
     def test_lowercase_in_string_value(self):
         env_var = "testname"
@@ -43,7 +43,7 @@ class TestNoBraceNoUnderscoreNoDigitEnvironmentVariable(unittest.TestCase):
         os.environ[first_env_var] = "8080"
         os.environ[second_env_var] = "80"
         compose_file = ComposeGenerator.get_with_two_environment_variables_in_string_value(first_env_var, second_env_var)
-        self.assertEqual(compose_file.services["frontend"].ports, "8080:80")
+        self.assertEqual(compose_file.services["frontend"].ports[0], "8080:80")
 
 
 if __name__ == '__main__':

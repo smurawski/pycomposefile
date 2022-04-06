@@ -25,7 +25,7 @@ class Labels(dict):
     compose_path = ""
 
     @classmethod
-    def from_parsed_yaml(cls, name, value, compose_path):
+    def from_parsed_yaml(cls, value, name, compose_path):
         instance = cls()
         instance.compose_path = f"{compose_path}/{name}"
         instance.update(value)

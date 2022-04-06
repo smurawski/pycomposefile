@@ -49,6 +49,23 @@ services:
     ports:
       - "8080:80"
     expose: "3000"
+    blkio_config:
+      weight: 300
+      weight_device:
+        - path: /dev/sda
+          weight: 400
+      device_read_bps:
+        - path: /dev/sdb
+          rate: '12mb'
+      device_read_iops:
+        - path: /dev/sdb
+          rate: 120
+      device_write_bps:
+        - path: /dev/sdb
+          rate: '1024k'
+      device_write_iops:
+        - path: /dev/sdb
+          rate: 30
     deploy:
       mode: replicated
       replicas: 2
