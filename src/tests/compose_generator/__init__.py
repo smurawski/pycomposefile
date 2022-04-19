@@ -127,3 +127,17 @@ services:
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
 
+    @staticmethod
+    def get_compose_with_command_list_with_quotes():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    ports:
+      - "8080:80"
+    expose: "3000"
+    command:
+      - echo
+      - "hello world"
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
