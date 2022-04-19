@@ -49,6 +49,7 @@ services:
     ports:
       - "8080:80"
     expose: "3000"
+    command: bundle exec thin -p 3000
     blkio_config:
       weight: 300
       weight_device:
@@ -107,3 +108,22 @@ services:
       - '5000'
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_command_list():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    ports:
+      - "8080:80"
+    expose: "3000"
+    command:
+      - bundle
+      - exec
+      - thin
+      - -p
+      - 3000
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+

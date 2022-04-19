@@ -72,12 +72,27 @@ class Ports(ComposeStringOrListElement):
         super().__init__(config, key, compose_path)
 
 
+class Command(ComposeStringOrListElement):
+    def __init__(self, config, key=None, compose_path=None):
+        self.data_type = str
+        super().__init__(config, key, compose_path)
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        string = ""
+        for v in self:
+            string += f"{v} "
+        return string.lstrip().rstrip()
+
+
 class Service(ComposeElement):
     element_keys = {
         "image": (str, ""),
         "container_name": (str, ""),
         "cpu_count": (Decimal, ""),
-        "command": (str, ""),
+        "command": (Command, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#command"),
         "deploy": (Deploy.from_parsed_yaml, ""),
         "expose": (Expose, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#expose"),  # https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
         "ports": (Ports, ""),

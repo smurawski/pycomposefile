@@ -72,6 +72,14 @@ services:
         compose_file = ComposeGenerator.get_compose_with_one_service_with_multiple_expose()
         self.assertEqual(compose_file.services["frontend"].expose, [3000, 4000, 5000])
 
+    def test_command_string_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
+        self.assertEqual(compose_file.services["frontend"].command.__str__(), "bundle exec thin -p 3000")
+
+    def test_command_list_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_command_list()
+        self.assertEqual("bundle exec thin -p 3000", compose_file.services["frontend"].command.__str__())
+
 
 if __name__ == '__main__':
     unittest.main()
