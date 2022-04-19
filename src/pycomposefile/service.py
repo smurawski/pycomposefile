@@ -1,4 +1,5 @@
 from decimal import Decimal
+import re
 
 from .service_blkio_config import BlkioConfig
 from .service_deploy import Deploy
@@ -81,9 +82,13 @@ class Command(ComposeStringOrListElement):
         return self.__repr__()
 
     def __repr__(self) -> str:
+        capture = re.compile(r"\w+(\s\w+)+")
         string = ""
         for v in self:
-            string += f"{v} "
+            if len(self) > 1 and capture.match(v):
+                string += f"\"{v}\""
+            else:
+                string += f"{v} "
         return string.lstrip().rstrip()
 
 
