@@ -57,25 +57,25 @@ CAP_LIST = [
 
 class Expose(ComposeStringOrListElement):
     def __init__(self, config, key=None, compose_path=None):
-        self.data_type = int
+        self.transform = int
         super().__init__(config, key, compose_path)
 
 
 class Cap(ComposeStringOrListElement):
     def __init__(self, config, key=None, compose_path=None):
-        self.data_type = str
+        self.transform = (str, CAP_LIST)
         super().__init__(config, key, compose_path)
 
 
 class Ports(ComposeStringOrListElement):
     def __init__(self, config, key=None, compose_path=None):
-        self.data_type = str
+        self.transform = str
         super().__init__(config, key, compose_path)
 
 
 class Command(ComposeStringOrListElement):
     def __init__(self, config, key=None, compose_path=None):
-        self.data_type = str
+        self.transform = str
         super().__init__(config, key, compose_path)
 
     def command_string(self):
