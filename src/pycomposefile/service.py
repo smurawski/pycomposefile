@@ -78,10 +78,7 @@ class Command(ComposeStringOrListElement):
         self.data_type = str
         super().__init__(config, key, compose_path)
 
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
+    def command_string(self):
         capture = re.compile(r"\w+(\s\w+)+")
         string = ""
         for v in self:

@@ -74,15 +74,15 @@ services:
 
     def test_command_string_from_service(self):
         compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
-        self.assertEqual(compose_file.services["frontend"].command.__str__(), "bundle exec thin -p 3000")
+        self.assertEqual(compose_file.services["frontend"].command.command_string(), "bundle exec thin -p 3000")
 
     def test_command_list_from_service(self):
         compose_file = ComposeGenerator.get_compose_with_command_list()
-        self.assertEqual("bundle exec thin -p 3000", compose_file.services["frontend"].command.__str__())
-    
+        self.assertEqual("bundle exec thin -p 3000", compose_file.services["frontend"].command.command_string())
+
     def test_command_list_with_quotes_from_service(self):
         compose_file = ComposeGenerator.get_compose_with_command_list_with_quotes()
-        self.assertEqual('echo "hello world"', compose_file.services["frontend"].command.__str__())
+        self.assertEqual('echo "hello world"', compose_file.services["frontend"].command.command_string())
 
 
 if __name__ == '__main__':
