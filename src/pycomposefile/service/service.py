@@ -4,7 +4,7 @@ import re
 from .service_blkio_config import BlkioConfig
 from .service_deploy import Deploy
 from .service_credential_spec import CredentialSpec
-from .compose_element import ComposeElement, ComposeStringOrListElement
+from ..compose_element import ComposeElement, ComposeStringOrListElement
 
 CAP_LIST = [
     "CAP_AUDIT_CONTROL",
@@ -145,9 +145,9 @@ class Service(ComposeElement):
         "cpu_count": (Decimal, ""),
         "entrypoint": (Command, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#entrypoint"),
         "command": (Command, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#command"),
-        "deploy": (Deploy.from_parsed_yaml, ""),
-        "expose": (Expose, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#expose"),  # https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
-        "ports": (Ports, ""),
+        "deploy": (Deploy.from_parsed_yaml, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md"),
+        "expose": (Expose, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#expose"),
+        "ports": (Ports, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#long-syntax-2"),
         "cpus": (Decimal, ""),
         "credential_spec": (CredentialSpec.from_parsed_yaml, ""),
         "blkio_config": (BlkioConfig.from_parsed_yaml,

@@ -1,5 +1,5 @@
 from decimal import Decimal
-from .compose_element import ComposeElement
+from ..compose_element import ComposeElement
 import re
 
 

@@ -1,5 +1,5 @@
 
-from .compose_element import ComposeElement, ComposeStringOrListElement
+from ..compose_element import ComposeElement, ComposeStringOrListElement
 
 
 class IoConfig(ComposeElement):

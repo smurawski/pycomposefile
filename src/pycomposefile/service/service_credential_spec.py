@@ -1,4 +1,4 @@
-from .compose_element import ComposeElement
+from ..compose_element import ComposeElement
 
 
 class CredentialSpec(ComposeElement):

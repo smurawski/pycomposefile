@@ -1,5 +1,5 @@
 import unittest
-from tests.compose_generator import ComposeGenerator
+from ..compose_generator import ComposeGenerator
 
 
 class TestComposeServices(unittest.TestCase):
@@ -89,6 +89,7 @@ services:
         self.assertEqual(80, compose_file.services["frontend"].ports[0].target)
         self.assertEqual(8443, compose_file.services["frontend"].ports[1].published)
         self.assertEqual("192.168.1.11", compose_file.services["frontend"].ports[1].host_ip)
+
 
 if __name__ == '__main__':
     unittest.main()
