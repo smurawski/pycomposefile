@@ -84,6 +84,11 @@ services:
         compose_file = ComposeGenerator.get_compose_with_command_list_with_quotes()
         self.assertEqual('echo "hello world"', compose_file.services["frontend"].command.command_string())
 
+    def test_structured_ports_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_structured_ports()
+        self.assertEqual(80, compose_file.services["frontend"].ports[0].target)
+        self.assertEqual(8443, compose_file.services["frontend"].ports[1].published)
+        self.assertEqual("192.168.1.11", compose_file.services["frontend"].ports[1].host_ip)
 
 if __name__ == '__main__':
     unittest.main()

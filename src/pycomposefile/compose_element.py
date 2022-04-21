@@ -2,7 +2,7 @@ import re
 import os
 
 
-class DataTypeTransformer:
+class DataTypeTransformer():
     def transform_supported_data(self, value, transform):
         if type(transform) is tuple:
             transform, valid_values = transform
