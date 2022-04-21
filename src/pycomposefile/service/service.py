@@ -1,9 +1,11 @@
 from decimal import Decimal
-import re
 
 from .service_blkio_config import BlkioConfig
 from .service_deploy import Deploy
 from .service_credential_spec import CredentialSpec
+from .service_cap import Cap
+from .service_command import Command
+from .service_ports import Ports
 from ..compose_element import ComposeElement, ComposeStringOrListElement
 
 CAP_LIST = [
@@ -61,83 +63,6 @@ class Expose(ComposeStringOrListElement):
         super().__init__(config, key, compose_path)
 
 
-class Cap(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = (str, CAP_LIST)
-        super().__init__(config, key, compose_path)
-
-
-class Port(ComposeElement):
-    element_keys = {
-        "target": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#long-syntax-2"),
-        "host_ip": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#long-syntax-2"),
-        "published": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#long-syntax-2"),
-        "protocol": ((str, ['tcp', 'udp']), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#long-syntax-2"),
-        "mode": ((str, ['host', 'ingress']), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#long-syntax-2"),
-    }
-
-    def __init__(self, port_definition, key=None, compose_path=""):
-        if isinstance(port_definition, str):
-            self.parse_string(port_definition)
-        else:
-            super().__init__(port_definition, compose_path)
-
-    def parse_string(self, port_definition):
-        port_matcher = re.compile(r'(?P<HostIp>((\d+\.\d+\.\d+\.\d+:)|))(?P<HostPort>(\d+:)|)(?P<ContainerPort>\d+)(?P<Protocol>((/(tcp|udp))|))')
-        matches = port_matcher.search(port_definition)
-        host_ip = matches.group('HostIp')
-        if host_ip == '':
-            host_ip = None
-        else:
-            host_ip = host_ip.rstrip(":")
-        host_port = matches.group('HostPort')
-        if host_port == '':
-            host_port = None
-        else:
-            host_port = host_port.rstrip(":")
-        container_port = matches.group('ContainerPort')
-        protocol = matches.group('Protocol')
-        if protocol == '':
-            protocol = 'tcp'
-
-        self.__setattr__('host_ip', host_ip)
-        self.__setattr__('published', host_port)
-        self.__setattr__('target', container_port)
-        self.__setattr__('protocol', protocol)
-        self.__setattr__('mode', 'host')
-
-    def __str__(self) -> str:
-        port = ''
-        if self.host_ip is not None:
-            port += f"{self.host_ip}:"
-        if self.published is not None:
-            port += f"{self.published}:"
-        port += f"{self.target}/{self.protocol}"
-        return port
-
-
-class Ports(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = Port
-        super().__init__(config, 'ports', compose_path)
-
-
-class Command(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = str
-        super().__init__(config, key, compose_path)
-
-    def command_string(self):
-        capture = re.compile(r"\w+(\s\w+)+")
-        string = ""
-        for v in self:
-            if len(self) > 1 and capture.match(v):
-                string += f"\"{v}\""
-            else:
-                string += f"{v} "
-        return string.lstrip().rstrip()
-
-
 class Service(ComposeElement):
     element_keys = {
         "image": (str, ""),
@@ -168,9 +93,9 @@ class Service(ComposeElement):
                    "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpuset"),
         "build": (None,
                   "https://github.com/compose-spec/compose-spec/blob/master/build.md"),
-        "cap_add": (None,
+        "cap_add": (Cap,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add"),
-        "cap_drop": (None,
+        "cap_drop": (Cap,
                      "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add"),
         "cgroup_parent": (None,
                           "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cgroup_parent"),
