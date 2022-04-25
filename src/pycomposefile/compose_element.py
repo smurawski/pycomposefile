@@ -107,7 +107,7 @@ class ComposeElement(DataTypeTransformer):
             return None
         compose_path = f"{compose_path}/{name}"
         return cls(config, compose_path)
-        
+
 
 class ComposeStringOrListElement(DataTypeTransformer, list):
     transform = None
