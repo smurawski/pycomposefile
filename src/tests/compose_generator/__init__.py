@@ -141,3 +141,57 @@ services:
       - "hello world"
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_structured_ports():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    ports:
+      - target: 80
+        host_ip: 127.0.0.1
+        published: 8080
+        protocol: tcp
+        mode: host
+
+      - target: 443
+        host_ip: 192.168.1.11
+        published: 8443
+        protocol: tcp
+        mode: host
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_structured_configs():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    configs:
+      - source: my_config
+        target: /redis_config
+        uid: "103"
+        gid: "103"
+        mode: 0440
+
+      - source: another_config
+        target: /db_config
+        uid: "105"
+        gid: "105"
+        mode: 0777
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_string_configs():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    configs:
+      - source: my_config
+      - source: another_config
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)

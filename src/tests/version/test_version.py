@@ -1,5 +1,5 @@
 import unittest
-from tests.compose_generator import ComposeGenerator
+from ..compose_generator import ComposeGenerator
 
 
 class TestComposeVersion(unittest.TestCase):
