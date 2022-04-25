@@ -3,9 +3,8 @@ import os
 
 
 class DataTypeTransformer():
-    def transform_supported_data(self, value, transform):
-        if type(transform) is tuple:
-            transform, valid_values = transform
+    def transform_supported_data(self, transform, value, valid_values=None):
+        if valid_values is not None:
             value = self.transform_and_validate_supported_data(value, transform, valid_values)
         else:
             value = transform(self.replace_environment_variables(value))
@@ -88,14 +87,19 @@ class ComposeElement(DataTypeTransformer):
             pass
 
     def set_supported_property_from_config(self, key, key_config, value, compose_path):
-        transform = key_config[0]
+        valid_values = None
+        if type(key_config[0]) is tuple:
+            transform, valid_values = key_config[0]
+        else:
+            transform = key_config[0]
+
         if transform is not None:
             if isinstance(value, dict):
                 value = transform(value, key, compose_path)
             elif isinstance(value, list):
                 value = transform(value, key, compose_path)
             elif value is not None:
-                value = self.transform_supported_data(value, transform)
+                value = self.transform_supported_data(transform, value, valid_values)
         else:
             # TODO: Logging message if value was not None
             value = None
@@ -111,6 +115,7 @@ class ComposeElement(DataTypeTransformer):
 
 class ComposeStringOrListElement(DataTypeTransformer, list):
     transform = None
+    valid_values = None
 
     def __init__(self, config, key=None, compose_path=None,):
         if compose_path is not None:
@@ -135,6 +140,6 @@ class ComposeStringOrListElement(DataTypeTransformer, list):
 
     def append_transform(self, config_value, key=None, compose_path=None):
         if isinstance(config_value, str) or isinstance(config_value, int):
-            self.append(self.transform_supported_data(config_value, self.transform))
+            self.append(self.transform_supported_data(self.transform, config_value, self.valid_values))
         else:
             self.append(self.transform(config_value, key, compose_path))

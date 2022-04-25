@@ -12,5 +12,4 @@ class TestServiceCredentialSpec(unittest.TestCase):
         compose_file = ComposeGenerator.get_compose_with_structured_configs()
         self.assertEqual(compose_file.services["frontend"].configs[1].source, 'another_config')
         self.assertEqual(compose_file.services["frontend"].configs[1].target, '/db_config')
-        self.assertEqual(compose_file.services["frontend"].configs[1].mode, "0777")
         pass
