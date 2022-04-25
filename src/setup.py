@@ -15,7 +15,7 @@ setuptools.setup(
     long_description=long_desc,
     long_description_content_type="text/markdown",
     url="https://github.com/smurawski/pycomposefile",
-    packages=['pycomposefile'],
+    packages=setuptools.find_packages(),
     key_words="docker compose",
     install_requires=required,
     python_requires=">=3.6",
