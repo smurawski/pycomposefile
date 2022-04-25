@@ -107,7 +107,7 @@ class ComposeElement(DataTypeTransformer):
             return None
         compose_path = f"{compose_path}/{name}"
         return cls(config, compose_path)
-
+        
 
 class ComposeStringOrListElement(DataTypeTransformer, list):
     transform = None
@@ -125,6 +125,13 @@ class ComposeStringOrListElement(DataTypeTransformer, list):
                     self.append_transform(v, key, compose_path)
         else:
             self.append_transform(config, key, compose_path)
+
+    def append(self, __object) -> None:
+        if isinstance(__object, list):
+            for element in __object:
+                super().append(element)
+        else:
+            super().append(__object)
 
     def append_transform(self, config_value, key=None, compose_path=None):
         if isinstance(config_value, str) or isinstance(config_value, int):

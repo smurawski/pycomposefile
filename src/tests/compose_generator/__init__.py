@@ -162,3 +162,36 @@ services:
         mode: host
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_structured_configs():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    configs:
+      - source: my_config
+        target: /redis_config
+        uid: "103"
+        gid: "103"
+        mode: 0440
+
+      - source: another_config
+        target: /db_config
+        uid: "105"
+        gid: "105"
+        mode: 0777
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_string_configs():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    configs:
+      - source: my_config
+      - source: another_config
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)

@@ -4,57 +4,10 @@ from .service_blkio_config import BlkioConfig
 from .service_deploy import Deploy
 from .service_credential_spec import CredentialSpec
 from .service_cap import Cap
+from .service_configs import Configs
 from .service_command import Command
 from .service_ports import Ports
 from ..compose_element import ComposeElement, ComposeStringOrListElement
-
-CAP_LIST = [
-    "CAP_AUDIT_CONTROL",
-    "CAP_AUDIT_READ",
-    "CAP_AUDIT_WRITE",
-    "CAP_BLOCK_SUSPEND",
-    "CAP_BPF",
-    "CAP_CHECKPOINT_RESTORE",
-    "CAP_SYS_ADMIN",
-    "CAP_CHOWN",
-    "CAP_DAC_OVERRIDE",
-    "CAP_DAC_READ_SEARCH",
-    "CAP_FOWNER",
-    "CAP_DAC_READ_SEARCH",
-    "CAP_FSETID",
-    "CAP_IPC_LOCK",
-    "CAP_IPC_OWNER",
-    "CAP_KILL",
-    "CAP_LEASE",
-    "CAP_LINUX_IMMUTABLE",
-    "CAP_MAC_ADMIN",
-    "CAP_MAC_OVERRIDE",
-    "CAP_MKNOD",
-    "CAP_NET_ADMIN",
-    "CAP_NET_BIND_SERVICE",
-    "CAP_NET_BROADCAST",
-    "CAP_NET_RAW",
-    "CAP_PERFMON",
-    "CAP_SYS_ADMIN",
-    "CAP_SETGID",
-    "CAP_SETFCAP",
-    "CAP_SETPCAP",
-    "CAP_SETUID",
-    "CAP_SYS_ADMIN",
-    "CAP_BPF",
-    "CAP_SYS_BOOT",
-    "CAP_SYS_CHROOT",
-    "CAP_SYS_MODULE",
-    "CAP_SYS_NICE",
-    "CAP_SYS_PACCT",
-    "CAP_SYS_PTRACE",
-    "CAP_SYS_RAWIO",
-    "CAP_SYS_RESOURCE",
-    "CAP_SYS_TIME",
-    "CAP_SYS_TTY_CONFIG",
-    "CAP_SYSLOG",
-    "CAP_WAKE_ALARM",
-]
 
 
 class Expose(ComposeStringOrListElement):
@@ -63,31 +16,37 @@ class Expose(ComposeStringOrListElement):
         super().__init__(config, key, compose_path)
 
 
+class CpuSets(ComposeStringOrListElement):
+    def __init__(self, config, key=None, compose_path=None):
+        self.transform = str
+        super().__init__(config, key, compose_path)
+
+
 class Service(ComposeElement):
     element_keys = {
         "image": (str, ""),
-        "container_name": (str, ""),
-        "cpu_count": (Decimal, ""),
+        "container_name": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#container_name"),
+        "cpu_count": (Decimal, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_count"),
         "entrypoint": (Command, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#entrypoint"),
         "command": (Command, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#command"),
         "deploy": (Deploy.from_parsed_yaml, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md"),
         "expose": (Expose, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#expose"),
         "ports": (Ports, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#long-syntax-2"),
-        "cpus": (Decimal, ""),
+        "cpus": (Decimal, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpus"),
         "credential_spec": (CredentialSpec.from_parsed_yaml, ""),
         "blkio_config": (BlkioConfig.from_parsed_yaml,
                          "https://github.com/compose-spec/compose-spec/blob/master/spec.md#blkio_config"),
-        "cpu_percent": (None,
+        "cpu_percent": (Decimal,
                         "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_percent"),
         "cpu_shares": (int,
                        "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_shares"),
         "cpu_period": (str,
                        "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_period"),
-        "cpu_quota": (None,
+        "cpu_quota": (int,
                       "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_quota"),
-        "cpu_rt_runtime": (None,
+        "cpu_rt_runtime": (str,
                            "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_rt_runtime"),
-        "cpu_rt_period": (None,
+        "cpu_rt_period": (str,
                           "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_rt_period"),
         "cpuset": (list,
                    "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpuset"),
@@ -97,8 +56,8 @@ class Service(ComposeElement):
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add"),
         "cap_drop": (Cap,
                      "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add"),
-        "cgroup_parent": (None,
+        "cgroup_parent": (str,
                           "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cgroup_parent"),
-        "configs": (None,
+        "configs": (Configs,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#configs"),
     }
