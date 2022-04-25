@@ -1,4 +1,4 @@
-from .service import Service
+from pycomposefile.service import Service
 
 
 class ComposeFile:

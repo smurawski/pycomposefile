@@ -1,13 +1,13 @@
 from decimal import Decimal
 
-from .service_blkio_config import BlkioConfig
-from .service_deploy import Deploy
-from .service_credential_spec import CredentialSpec
-from .service_cap import Cap
-from .service_configs import Configs
-from .service_command import Command
-from .service_ports import Ports
-from ..compose_element import ComposeElement, ComposeStringOrListElement
+from pycomposefile.service.service_blkio_config import BlkioConfig
+from pycomposefile.service.service_deploy import Deploy
+from pycomposefile.service.service_credential_spec import CredentialSpec
+from pycomposefile.service.service_cap import Cap
+from pycomposefile.service.service_configs import Configs
+from pycomposefile.service.service_command import Command
+from pycomposefile.service.service_ports import Ports
+from pycomposefile.compose_element import ComposeElement, ComposeStringOrListElement
 
 
 class Expose(ComposeStringOrListElement):

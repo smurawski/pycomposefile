@@ -1,1 +1,1 @@
-from .service import Service
+from pycomposefile.service.service import Service

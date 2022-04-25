@@ -1,5 +1,5 @@
 import re
-from ..compose_element import ComposeStringOrListElement
+from pycomposefile.compose_element import ComposeStringOrListElement
 
 
 class Command(ComposeStringOrListElement):

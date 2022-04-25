@@ -1,4 +1,4 @@
-from ..compose_element import ComposeElement, ComposeStringOrListElement
+from pycomposefile.compose_element import ComposeElement, ComposeStringOrListElement
 
 
 class Config(ComposeElement):

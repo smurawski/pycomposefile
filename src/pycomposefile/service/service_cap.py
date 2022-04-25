@@ -1,4 +1,4 @@
-from ..compose_element import ComposeStringOrListElement
+from pycomposefile.compose_element import ComposeStringOrListElement
 
 CAP_LIST = [
     "CAP_AUDIT_CONTROL",
