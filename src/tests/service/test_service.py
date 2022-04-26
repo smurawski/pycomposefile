@@ -90,6 +90,20 @@ services:
         self.assertEqual(8443, compose_file.services["frontend"].ports[1].published)
         self.assertEqual("192.168.1.11", compose_file.services["frontend"].ports[1].host_ip)
 
+    def test_entrypoint_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_entrypoint_no_command()
+        self.assertEqual("/code/entrypoint.sh", compose_file.services["frontend"].entrypoint.command_string())
+
+    def test_entrypoint_list_from_service(self):
+        entrypoint = "php -d zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"
+        entrypoint += " -d memory_limit=-1 vendor/bin/phpunit"
+        compose_file = ComposeGenerator.get_compose_with_entrypoint_as_list_no_command()
+        self.assertEqual(entrypoint, compose_file.services["frontend"].entrypoint.command_string())
+
+    def test_entrypoint_and_command_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_entrypoint_and_command()
+        self.assertEqual('/code/entrypoint.sh echo "hello world"', compose_file.services["frontend"].entrypoint_and_command())
+
 
 if __name__ == '__main__':
     unittest.main()

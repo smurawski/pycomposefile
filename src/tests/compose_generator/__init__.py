@@ -195,3 +195,45 @@ services:
       - source: another_config
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_entrypoint_no_command():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    entrypoint: /code/entrypoint.sh
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_entrypoint_as_list_no_command():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    entrypoint:
+      - php
+      - -d
+      - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+      - -d
+      - memory_limit=-1
+      - vendor/bin/phpunit
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_entrypoint_and_command():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    ports:
+      - "8080:80"
+    expose: "3000"
+    entrypoint: /code/entrypoint.sh
+    command:
+      - echo
+      - "hello world"
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)

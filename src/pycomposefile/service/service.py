@@ -61,3 +61,15 @@ class Service(ComposeElement):
         "configs": (Configs,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#configs"),
     }
+
+    def entrypoint_and_command(self):
+        if self.command is None and self.entrypoint is None:
+            return None
+        else:
+            container_entrypoint_and_command = ""
+            if self.entrypoint is not None:
+                container_entrypoint_and_command += self.entrypoint.command_string()
+                container_entrypoint_and_command += " "
+            if self.command is not None:
+                container_entrypoint_and_command += self.command.command_string()
+            return container_entrypoint_and_command
