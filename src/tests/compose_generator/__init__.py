@@ -271,3 +271,64 @@ services:
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
 
+    @staticmethod
+    def get_compose_with_service_dependencies():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis
+  db:
+    image: postgres
+  reporting:
+    image: reporting
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_multiple_service_dependencies():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres
+    depends_on:
+      - redis
+  redis:
+    image: redis
+  reporting:
+    image: reporting
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_circular_service_dependencies():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres
+    depends_on:
+      - redis
+  redis:
+    image: redis
+    depends_on:
+      - reporting
+  reporting:
+    image: reporting
+    depends_on:
+      - db
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)

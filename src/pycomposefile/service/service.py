@@ -22,6 +22,12 @@ class CpuSets(ComposeStringOrListElement):
         super().__init__(config, key, compose_path)
 
 
+class DependsOn(ComposeStringOrListElement):
+    def __init__(self, config, key=None, compose_path=None):
+        self.transform = str
+        super().__init__(config, key, compose_path)
+
+
 class Service(ComposeElement):
     element_keys = {
         "image": (str, ""),
@@ -60,6 +66,7 @@ class Service(ComposeElement):
                           "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cgroup_parent"),
         "configs": (Configs,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#configs"),
+        "depends_on": (DependsOn, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#depends_on")
     }
 
     def entrypoint_and_command(self):
