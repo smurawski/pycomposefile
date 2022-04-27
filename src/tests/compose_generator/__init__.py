@@ -237,3 +237,37 @@ services:
       - "hello world"
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_file_credential_spec():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    credential_spec:
+      file: my-credential-spec.json
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_registry_credential_spec():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    credential_spec:
+      registry: my-credential-spec
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_config_credential_spec():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    credential_spec:
+      config: my_credential_spec
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
