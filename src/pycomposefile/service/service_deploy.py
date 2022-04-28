@@ -1,6 +1,7 @@
-from decimal import Decimal
-from pycomposefile.compose_element import ComposeElement
 import re
+
+from decimal import Decimal
+from pycomposefile.compose_element import ComposeElement, ComposeListOrMapElement
 
 
 class ResourceDetails(ComposeElement):
@@ -18,6 +19,17 @@ class Resources(ComposeElement):
     element_keys = {
         "limits": (ResourceDetails.from_parsed_yaml, ""),
         "reservations": (ResourceDetails.from_parsed_yaml, ""),
+    }
+
+
+class PlacementSpec(ComposeListOrMapElement):
+    pass
+
+
+class Placement(ComposeElement):
+    element_keys = {
+        "constraints": (PlacementSpec, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#constraints"),
+        "preferences": (PlacementSpec, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#preferences"),
     }
 
 
@@ -65,7 +77,7 @@ class Deploy(ComposeElement):
         "resources": (Resources.from_parsed_yaml, ""),
         "rollback_config": (UpdateConfig.from_parsed_yaml, ""),
         "update_config": (UpdateConfig.from_parsed_yaml, ""),
-        "placement": (None,
+        "placement": (Placement.from_parsed_yaml,
                       "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#placement"),
         "restart_policy": (None,
                            "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#restart_policy"),

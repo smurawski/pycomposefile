@@ -50,6 +50,12 @@ services:
         self.assertIsNotNone(deploy.rollback_config)
         self.assertEqual(deploy.rollback_config.monitor, "5m")
 
+    def test_service_with_deploy_placement_preferences(self):
+        compose_file = ComposeGenerator.get_compose_with_one_service_with_deploy()
+        deploy = compose_file.services["frontend"].deploy
+        self.assertEqual(deploy.placement.preferences["datacenter"], 'eastus')
+        self.assertEqual(deploy.placement.constraints["disktype"], 'ssd')
+
 
 if __name__ == '__main__':
     unittest.main()

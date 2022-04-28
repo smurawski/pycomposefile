@@ -74,6 +74,8 @@ services:
       placement:
         constraints:
           - disktype=ssd
+        preferences:
+          datacenter=eastus
       resources:
         limits:
           cpus: '0.50'
