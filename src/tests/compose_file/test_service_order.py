@@ -1,4 +1,8 @@
 import unittest
+
+from yaml import serialize
+
+from src.pycomposefile.service.service import DependsOn
 from ..compose_generator import ComposeGenerator
 
 
@@ -16,6 +20,10 @@ class TestServiceOrdering(unittest.TestCase):
     def test_circular_service_order(self):
         with self.assertRaises(RecursionError):
             ComposeGenerator.get_compose_with_circular_service_dependencies()
+
+    def test_service_order_with_conditions(self):
+        compose_file = ComposeGenerator.get_compose_with_service_dependencies_and_conditions()
+        self.assertEqual(compose_file.services["frontend"].depends_on[0].condition, 'service_healthy')
 
 
 if __name__ == '__main__':

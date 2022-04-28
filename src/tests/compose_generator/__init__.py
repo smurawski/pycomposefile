@@ -332,3 +332,23 @@ services:
       - db
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_service_dependencies_and_conditions():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+  redis:
+    image: redis
+  db:
+    image: postgres
+  reporting:
+    image: reporting
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)

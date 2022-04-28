@@ -22,9 +22,29 @@ class CpuSets(ComposeStringOrListElement):
         super().__init__(config, key, compose_path)
 
 
+class Dependency(str):
+    def __new__(cls, config, key=None, compose_path=None, ) -> None:
+        condition = None
+        if isinstance(config, Dependency):
+            return config
+        if isinstance(config, tuple):
+            name, detail = config
+            condition = detail["condition"]
+        else:
+            name = config
+        ob = super(Dependency, cls).__new__(cls, name)
+        ob.__setattr__('condition', condition)
+        return ob
+
+
 class DependsOn(ComposeStringOrListElement):
     def __init__(self, config, key=None, compose_path=None):
-        self.transform = str
+        self.transform = Dependency
+        if isinstance(config, dict):
+            config_to_list = []
+            for key in config.keys():
+                config_to_list.append((key, config[key]))
+            config = config_to_list
         super().__init__(config, key, compose_path)
 
 
