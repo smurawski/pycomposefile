@@ -74,6 +74,8 @@ services:
       placement:
         constraints:
           - disktype=ssd
+        preferences:
+          datacenter=eastus
       resources:
         limits:
           cpus: '0.50'
@@ -193,5 +195,162 @@ services:
     configs:
       - source: my_config
       - source: another_config
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_entrypoint_no_command():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    entrypoint: /code/entrypoint.sh
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_entrypoint_as_list_no_command():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    entrypoint:
+      - php
+      - -d
+      - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+      - -d
+      - memory_limit=-1
+      - vendor/bin/phpunit
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_entrypoint_and_command():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    ports:
+      - "8080:80"
+    expose: "3000"
+    entrypoint: /code/entrypoint.sh
+    command:
+      - echo
+      - "hello world"
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_file_credential_spec():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    credential_spec:
+      file: my-credential-spec.json
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_registry_credential_spec():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    credential_spec:
+      registry: my-credential-spec
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_config_credential_spec():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    credential_spec:
+      config: my_credential_spec
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_service_dependencies():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis
+  db:
+    image: postgres
+  reporting:
+    image: reporting
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_multiple_service_dependencies():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres
+    depends_on:
+      - redis
+  redis:
+    image: redis
+  reporting:
+    image: reporting
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_circular_service_dependencies():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres
+    depends_on:
+      - redis
+  redis:
+    image: redis
+    depends_on:
+      - reporting
+  reporting:
+    image: reporting
+    depends_on:
+      - db
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_service_dependencies_and_conditions():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+  redis:
+    image: redis
+  db:
+    image: postgres
+  reporting:
+    image: reporting
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)

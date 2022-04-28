@@ -1,13 +1,14 @@
-from decimal import Decimal
-from pycomposefile.compose_element import ComposeElement
 import re
+
+from decimal import Decimal
+from pycomposefile.compose_element import ComposeElement, ComposeListOrMapElement
 
 
 class ResourceDetails(ComposeElement):
     element_keys = {
         "cpus": (Decimal, ""),
         "memory": (str, ""),
-        "pids": (None,
+        "pids": (int,
                  "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#pids"),
         "devices": (None,
                     "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#devices"),
@@ -21,15 +22,19 @@ class Resources(ComposeElement):
     }
 
 
-class Labels(dict):
-    compose_path = ""
+class PlacementSpec(ComposeListOrMapElement):
+    pass
 
-    @classmethod
-    def from_parsed_yaml(cls, value, name, compose_path):
-        instance = cls()
-        instance.compose_path = f"{compose_path}/{name}"
-        instance.update(value)
-        return instance
+
+class Placement(ComposeElement):
+    element_keys = {
+        "constraints": (PlacementSpec, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#constraints"),
+        "preferences": (PlacementSpec, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#preferences"),
+    }
+
+
+class Labels(ComposeListOrMapElement):
+    pass
 
 
 class DeployTimespan(str):
@@ -59,13 +64,13 @@ class UpdateConfig(ComposeElement):
 class Deploy(ComposeElement):
     element_keys = {
         "endpoint_mode": ((str, ["vip", "dnsrr"]), ""),
-        "labels": (Labels.from_parsed_yaml, ""),
+        "labels": (Labels, ""),
         "mode": ((str, ["global", "replicated"]), ""),
         "replicas": (int, ""),
         "resources": (Resources.from_parsed_yaml, ""),
         "rollback_config": (UpdateConfig.from_parsed_yaml, ""),
         "update_config": (UpdateConfig.from_parsed_yaml, ""),
-        "placement": (None,
+        "placement": (Placement.from_parsed_yaml,
                       "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#placement"),
         "restart_policy": (None,
                            "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#restart_policy"),

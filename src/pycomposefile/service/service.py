@@ -22,6 +22,32 @@ class CpuSets(ComposeStringOrListElement):
         super().__init__(config, key, compose_path)
 
 
+class Dependency(str):
+    def __new__(cls, config, key=None, compose_path=None, ) -> None:
+        condition = None
+        if isinstance(config, Dependency):
+            return config
+        if isinstance(config, tuple):
+            name, detail = config
+            condition = detail["condition"]
+        else:
+            name = config
+        ob = super(Dependency, cls).__new__(cls, name)
+        ob.__setattr__('condition', condition)
+        return ob
+
+
+class DependsOn(ComposeStringOrListElement):
+    def __init__(self, config, key=None, compose_path=None):
+        self.transform = Dependency
+        if isinstance(config, dict):
+            config_to_list = []
+            for key in config.keys():
+                config_to_list.append((key, config[key]))
+            config = config_to_list
+        super().__init__(config, key, compose_path)
+
+
 class Service(ComposeElement):
     element_keys = {
         "image": (str, ""),
@@ -60,4 +86,17 @@ class Service(ComposeElement):
                           "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cgroup_parent"),
         "configs": (Configs,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#configs"),
+        "depends_on": (DependsOn, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#depends_on")
     }
+
+    def entrypoint_and_command(self):
+        if self.command is None and self.entrypoint is None:
+            return None
+        else:
+            container_entrypoint_and_command = ""
+            if self.entrypoint is not None:
+                container_entrypoint_and_command += self.entrypoint.command_string()
+                container_entrypoint_and_command += " "
+            if self.command is not None:
+                container_entrypoint_and_command += self.command.command_string()
+            return container_entrypoint_and_command
