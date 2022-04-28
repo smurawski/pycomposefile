@@ -8,7 +8,7 @@ class ResourceDetails(ComposeElement):
     element_keys = {
         "cpus": (Decimal, ""),
         "memory": (str, ""),
-        "pids": (None,
+        "pids": (int,
                  "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#pids"),
         "devices": (None,
                     "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#devices"),
@@ -33,15 +33,8 @@ class Placement(ComposeElement):
     }
 
 
-class Labels(dict):
-    compose_path = ""
-
-    @classmethod
-    def from_parsed_yaml(cls, value, name, compose_path):
-        instance = cls()
-        instance.compose_path = f"{compose_path}/{name}"
-        instance.update(value)
-        return instance
+class Labels(ComposeListOrMapElement):
+    pass
 
 
 class DeployTimespan(str):
@@ -71,7 +64,7 @@ class UpdateConfig(ComposeElement):
 class Deploy(ComposeElement):
     element_keys = {
         "endpoint_mode": ((str, ["vip", "dnsrr"]), ""),
-        "labels": (Labels.from_parsed_yaml, ""),
+        "labels": (Labels, ""),
         "mode": ((str, ["global", "replicated"]), ""),
         "replicas": (int, ""),
         "resources": (Resources.from_parsed_yaml, ""),
