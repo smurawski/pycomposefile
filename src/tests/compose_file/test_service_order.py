@@ -1,8 +1,5 @@
 import unittest
 
-from yaml import serialize
-
-from src.pycomposefile.service.service import DependsOn
 from ..compose_generator import ComposeGenerator
 
 
