@@ -6,6 +6,7 @@ from pycomposefile.service.service_credential_spec import CredentialSpec
 from pycomposefile.service.service_cap import Cap
 from pycomposefile.service.service_configs import Configs
 from pycomposefile.service.service_command import Command
+from pycomposefile.service.service_environment import Environment
 from pycomposefile.service.service_ports import Ports
 from pycomposefile.compose_element import ComposeElement, ComposeStringOrListElement, ComposeByteValue
 
@@ -87,6 +88,7 @@ class Service(ComposeElement):
         "configs": (Configs,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#configs"),
         "depends_on": (DependsOn, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#depends_on"),
+        "environment": (Environment, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#env_file"),
         "mem_reservation": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_reservation"),
     }
 

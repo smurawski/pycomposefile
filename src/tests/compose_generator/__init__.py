@@ -364,3 +364,30 @@ services:
     mem_reservation: 1.5gb
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+      
+    @staticmethod
+    def get_compose_with_environment_map():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    environment:
+      RACK_ENV: development
+      SHOW: "true"
+      USER_INPUT:
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_environment_list():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    environment:
+      - RACK_ENV=development
+      - SHOW=true
+      - USER_INPUT
+      - USER_INPUT=
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
