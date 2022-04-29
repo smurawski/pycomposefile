@@ -1,13 +1,13 @@
 import re
 
 from decimal import Decimal
-from pycomposefile.compose_element import ComposeElement, ComposeListOrMapElement
+from pycomposefile.compose_element import ComposeElement, ComposeListOrMapElement, ComposeByteValue
 
 
 class ResourceDetails(ComposeElement):
     element_keys = {
         "cpus": (Decimal, ""),
-        "memory": (str, ""),
+        "memory": (ComposeByteValue, ""),
         "pids": (int,
                  "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#pids"),
         "devices": (None,

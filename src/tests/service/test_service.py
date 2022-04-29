@@ -104,6 +104,11 @@ services:
         compose_file = ComposeGenerator.get_compose_with_entrypoint_and_command()
         self.assertEqual('/code/entrypoint.sh echo "hello world"', compose_file.services["frontend"].entrypoint_and_command())
 
+    def test_mem_reservation_from_service(self):
+        compose_file = ComposeGenerator.get_compose_with_memory_reservation()
+        self.assertEqual(1610612736, compose_file.services["frontend"].mem_reservation.value)
+        self.assertEqual(1.5, compose_file.services["frontend"].mem_reservation.as_gigabytes())
+
 
 if __name__ == '__main__':
     unittest.main()
