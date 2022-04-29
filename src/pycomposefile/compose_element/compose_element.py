@@ -1,4 +1,34 @@
+from decimal import Decimal
 from .compose_datatype_transformer import ComposeDataTypeTransformer
+
+
+class ComposeByteValue(ComposeDataTypeTransformer):
+    compose_path = ""
+    value = 0.0
+    _conversions = {
+        'gb': 1073741824,
+        'g': 1073741824,
+        'mb': 1048576,
+        'kb': 1024,
+        'm': 1048576,
+        'k': 1024,
+        'b': 1,
+    }
+
+    def convert_value(self, value_string):
+        value_string = value_string.lower()
+        for key in self._conversions.keys():
+            if value_string.endswith(key):
+                return Decimal(value_string.rstrip(key)) * self._conversions[key]
+        return Decimal(value_string)
+
+    def __init__(self, config, compose_path=None):
+        if compose_path is not None:
+            self.compose_path = compose_path
+        self.value = self.convert_value(config)
+
+    def as_gigabytes(self):
+        return self.value / self._conversions['gb']
 
 
 class ComposeElement(ComposeDataTypeTransformer):

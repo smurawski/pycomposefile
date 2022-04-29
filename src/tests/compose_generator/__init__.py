@@ -354,3 +354,13 @@ services:
     image: reporting
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_memory_reservation():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    mem_reservation: 1.5gb
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
