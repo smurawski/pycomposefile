@@ -16,6 +16,7 @@ class ComposeByteValue(ComposeDataTypeTransformer):
     }
 
     def convert_value(self, value_string):
+        value_string = value_string.lower()
         for key in self._conversions.keys():
             if value_string.endswith(key):
                 return Decimal(value_string.rstrip(key)) * self._conversions[key]
