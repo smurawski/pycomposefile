@@ -44,8 +44,7 @@ jobs:
 
       - name: Run Unit Tests and generate coverage report
         run: |
-          cd src
-          python -m unittest -v
+          python -m unittest discover -s ./src -v
           coverage run -m unittest
           coverage report
           coverage html
