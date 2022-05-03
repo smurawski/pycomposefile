@@ -1,3 +1,4 @@
+from ast import Str
 from decimal import Decimal
 
 from pycomposefile.service.service_blkio_config import BlkioConfig
@@ -6,7 +7,7 @@ from pycomposefile.service.service_credential_spec import CredentialSpec
 from pycomposefile.service.service_cap import Cap
 from pycomposefile.service.service_configs import Configs
 from pycomposefile.service.service_command import Command
-from pycomposefile.service.service_environment import Environment
+from pycomposefile.service.service_environment import Environment, EnvFile
 from pycomposefile.service.service_ports import Ports
 from pycomposefile.compose_element import ComposeElement, ComposeStringOrListElement, ComposeByteValue
 
@@ -88,7 +89,8 @@ class Service(ComposeElement):
         "configs": (Configs,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#configs"),
         "depends_on": (DependsOn, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#depends_on"),
-        "environment": (Environment, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#env_file"),
+        "env_file": (EnvFile, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#env_file"),
+        "environment": (Environment, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#environment"),
         "mem_reservation": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_reservation"),
     }
 
@@ -103,3 +105,11 @@ class Service(ComposeElement):
             if self.command is not None:
                 container_entrypoint_and_command += self.command.command_string()
             return container_entrypoint_and_command
+
+    def resolve_environment_hierarchy(self):
+        if self.env_file is not None:
+            env_file = self.env_file.readFile()
+            env_file.update(self.environment)
+            return env_file
+        else:
+            return self.environment
