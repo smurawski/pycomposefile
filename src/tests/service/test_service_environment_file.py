@@ -2,13 +2,12 @@ import unittest
 
 from ..compose_generator import ComposeGenerator
 
-
 class TestComposeServiceEnvironmentFile(unittest.TestCase):
     def test_service_with_single_environment_file(self):
         compose_file = ComposeGenerator.get_compose_with_environment_file_single()
         environment_from_file = compose_file.services["frontend"].env_file.readFile()
 
-        self.assertEqual(compose_file.services["frontend"].env_file[0], "./sample/test.env")
+        self.assertEqual(compose_file.services["frontend"].env_file[0], "../sample/test.env")
         self.assertEqual(environment_from_file["RACK_ENV"], "development")
         self.assertEqual(environment_from_file["VAR"], '"quoted"')
 
@@ -16,7 +15,7 @@ class TestComposeServiceEnvironmentFile(unittest.TestCase):
         compose_file = ComposeGenerator.get_compose_with_environment_file_list()
         environment_from_file = compose_file.services["frontend"].env_file.readFile()
 
-        self.assertEqual(compose_file.services["frontend"].env_file, ['./sample/common.env', './sample/apps/web.env', './sample/opt/runtime_opts.env'])
+        self.assertEqual(compose_file.services["frontend"].env_file, ['../sample/common.env', '../sample/apps/web.env', '../sample/opt/runtime_opts.env'])
         self.assertEqual(environment_from_file["RACK_ENV"], "development")
         self.assertEqual(environment_from_file["VAR"], '"quoted"')
         self.assertEqual(environment_from_file["BAR"], "faz")
