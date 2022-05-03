@@ -1,7 +1,4 @@
-from os import environ
 import unittest
-
-from src.pycomposefile import compose_file
 
 from ..compose_generator import ComposeGenerator
 
