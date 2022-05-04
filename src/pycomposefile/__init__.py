@@ -1,1 +1,1 @@
-from pycomposefile.compose_file import ComposeFile
+from .compose_file import ComposeFile

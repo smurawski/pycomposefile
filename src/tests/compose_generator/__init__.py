@@ -391,3 +391,36 @@ services:
       - USER_INPUT=
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_environment_file_single():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    env_file: ./sample/test.env
+    environment:
+      - RACK_ENV=development
+      - SHOW=true
+      - USER_INPUT
+      - USER_INPUT=
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_environment_file_list():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    env_file:
+      - ./sample/common.env
+      - ./sample/apps/web.env
+      - ./sample/opt/runtime_opts.env
+    environment:
+      - RACK_ENV=canary
+      - SHOW=true
+      - USER_INPUT
+      - USER_INPUT=
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
