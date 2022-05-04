@@ -38,7 +38,7 @@ jobs:
       - name: Install requirements
         run: |
           source env/bin/activate
-          python -m pip install coverage
+          #python -m pip install coverage
           python -m pip install -r requirements.txt
       
       - name: Lint
@@ -50,9 +50,9 @@ jobs:
         run: |
           source env/bin/activate
           python -m unittest discover -s ./src -v
-          coverage run -m unittest
-          coverage report
-          coverage html
+          #coverage run -m unittest
+          #coverage report
+          #coverage html
 
       - name: Run package creation
         run: |
