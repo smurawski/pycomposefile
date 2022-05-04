@@ -398,7 +398,7 @@ services:
 services:
   frontend:
     image: awesome/webapp
-    env_file: ../sample/test.env
+    env_file: ./sample/test.env
     environment:
       - RACK_ENV=development
       - SHOW=true
@@ -414,9 +414,9 @@ services:
   frontend:
     image: awesome/webapp
     env_file:
-      - ../sample/common.env
-      - ../sample/apps/web.env
-      - ../sample/opt/runtime_opts.env
+      - ./sample/common.env
+      - ./sample/apps/web.env
+      - ./sample/opt/runtime_opts.env
     environment:
       - RACK_ENV=canary
       - SHOW=true

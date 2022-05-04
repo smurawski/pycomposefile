@@ -31,26 +31,31 @@ jobs:
 
       - name: Upgrade pip version
         run: |
+          python -m venv env
+          source env/bin/activate
           python -m pip install -U pip
 
       - name: Install requirements
         run: |
+          source env/bin/activate
           python -m pip install coverage
           python -m pip install -r requirements.txt
       
       - name: Lint
         run: |
+          source env/bin/activate
           python -m flake8 -v src/
 
       - name: Run Unit Tests and generate coverage report
         run: |
-          cd src
-          python -m unittest -v
+          source env/bin/activate
+          python -m unittest discover -s ./src -v
           coverage run -m unittest
           coverage report
           coverage html
 
       - name: Run package creation
         run: |
+          source env/bin/activate
           cd src
           python -m build --sdist --wheel --outdir dist/ .

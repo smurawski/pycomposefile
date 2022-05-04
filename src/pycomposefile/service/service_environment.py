@@ -19,5 +19,5 @@ class EnvFile(ComposeStringOrListElement):
             for line in f.readlines():
                 if not line.startswith("#"):
                     env_array.append(line.rstrip("\n"))
-
+            f.close()
         return Environment(env_array)
