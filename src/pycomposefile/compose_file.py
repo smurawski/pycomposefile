@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from pycomposefile.service import Service
+from pycomposefile.secrets import Secrets
 
 
 class ComposeFile:
@@ -10,16 +11,27 @@ class ComposeFile:
         if version is not None:
             version = str(version)
         self.version = version
+
+        # Services Logic
         self.services = OrderedDict()
-        self.compose_path = "services"
         for service in deserialized_compose_file["services"].keys():
             self.services[service] = Service.from_parsed_yaml(
                 deserialized_compose_file["services"][service],
                 service,
-                self.compose_path
+                "services"
             )
         for service_name in self.services.keys():
             self._append_ordered_service(service_name)
+
+        # Secret Logic
+        if "secrets" in deserialized_compose_file:
+            self.secrets = OrderedDict()
+            for secret in deserialized_compose_file["secrets"].keys():
+                self.secrets[secret] = Secrets.from_parsed_yaml(
+                    deserialized_compose_file["secrets"][secret],
+                    secret,
+                    "secrets"
+                )
 
     def _append_ordered_service(self, service_name):
         service = self.services[service_name]

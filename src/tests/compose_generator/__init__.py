@@ -364,7 +364,7 @@ services:
     mem_reservation: 1.5gb
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
-      
+
     @staticmethod
     def get_compose_with_environment_map():
         compose = """
@@ -422,5 +422,53 @@ services:
       - SHOW=true
       - USER_INPUT
       - USER_INPUT=
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_one_secret():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    secrets:
+      - my_secret
+secrets:
+  my_secret:
+    file: ./sample/my_secret.txt
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_external_secret():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    secrets:
+      - my_other_secret
+secrets:
+  my_other_secret:
+    external: true
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_long_syntax():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    secrets:
+      - source: my_secret
+        target: redis_secret
+        uid: '103'
+        gid: '103'
+        mode: 0440
+secrets:
+  my_secret:
+    file: ./sample/my_secret.txt
+  my_other_secret:
+    external: true
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
