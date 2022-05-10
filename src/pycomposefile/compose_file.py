@@ -24,13 +24,14 @@ class ComposeFile:
             self._append_ordered_service(service_name)
 
         # Secret Logic
-        self.secrets = OrderedDict()
-        for secret in deserialized_compose_file["secrets"].keys():
-            self.secrets[secret] = Secrets.from_parsed_yaml(
-                deserialized_compose_file["secrets"][secret],
-                secret,
-                "secrets"
-            )
+        if "secrets" in deserialized_compose_file:
+            self.secrets = OrderedDict()
+            for secret in deserialized_compose_file["secrets"].keys():
+                self.secrets[secret] = Secrets.from_parsed_yaml(
+                    deserialized_compose_file["secrets"][secret],
+                    secret,
+                    "secrets"
+                )
 
     def _append_ordered_service(self, service_name):
         service = self.services[service_name]
