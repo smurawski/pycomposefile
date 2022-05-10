@@ -1,11 +1,10 @@
-from ast import Str
 from decimal import Decimal
 
 from pycomposefile.service.service_blkio_config import BlkioConfig
 from pycomposefile.service.service_deploy import Deploy
 from pycomposefile.service.service_credential_spec import CredentialSpec
 from pycomposefile.service.service_cap import Cap
-from pycomposefile.service.service_configs import Configs
+from pycomposefile.service.service_configs import Configs, Secrets
 from pycomposefile.service.service_command import Command
 from pycomposefile.service.service_environment import Environment, EnvFile
 from pycomposefile.service.service_ports import Ports
@@ -92,6 +91,7 @@ class Service(ComposeElement):
         "env_file": (EnvFile, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#env_file"),
         "environment": (Environment, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#environment"),
         "mem_reservation": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_reservation"),
+        "secrets": (Secrets, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#secrets")
     }
 
     def entrypoint_and_command(self):
