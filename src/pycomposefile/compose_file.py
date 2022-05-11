@@ -24,6 +24,7 @@ class ComposeFile:
             self._append_ordered_service(service_name)
 
         # Secret Logic
+        self.secrets = None
         if "secrets" in deserialized_compose_file:
             self.secrets = OrderedDict()
             for secret in deserialized_compose_file["secrets"].keys():
