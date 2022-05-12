@@ -91,7 +91,8 @@ class Service(ComposeElement):
         "env_file": (EnvFile, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#env_file"),
         "environment": (Environment, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#environment"),
         "mem_reservation": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_reservation"),
-        "secrets": (Secrets, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#secrets")
+        "secrets": (Secrets, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#secrets"),
+        "scale": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#scale"),
     }
 
     def entrypoint_and_command(self):
