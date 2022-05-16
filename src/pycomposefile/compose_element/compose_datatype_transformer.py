@@ -38,12 +38,15 @@ class ComposeDataTypeTransformer():
         value = self.replace_environment_variables_with_unset(value)
         value = self.replace_mandatory_variables_with_empty_or_unset(value)
         value = self.replace_mandatory_variables_with_unset(value)
+        value = self.do_not_replace_variables(value)
 
         return value
 
     def replace_environment_variables_with_empty_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)\:-(?P<defaultvalue>.+)\}")
+        capture = re.compile(r"(\$+)\{(?P<variablename>\w+)\:-(?P<defaultvalue>.+)\}")
         matches = capture.search(value)
+        if matches is not None and matches[1] == "$$":
+            return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
             default_value = matches.group("defaultvalue")
@@ -54,8 +57,10 @@ class ComposeDataTypeTransformer():
         return value
 
     def replace_environment_variables_with_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)-(?P<defaultvalue>.+)\}")
+        capture = re.compile(r"(\$+)\{(?P<variablename>\w+)-(?P<defaultvalue>.+)\}")
         matches = capture.search(value)
+        if matches is not None and matches[1] == "$$":
+            return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
             default_value = matches.group("defaultvalue")
@@ -66,8 +71,10 @@ class ComposeDataTypeTransformer():
         return value
 
     def replace_mandatory_variables_with_empty_or_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)\:\?(err)\}")
+        capture = re.compile(r"(\$+)\{(?P<variablename>\w+)\:\?(err)\}")
         matches = capture.search(value)
+        if matches is not None and matches[1] == "$$":
+            return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
             if env_var is None or len(env_var) == 0:
@@ -78,8 +85,10 @@ class ComposeDataTypeTransformer():
         return value
 
     def replace_mandatory_variables_with_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)\?(err)\}")
+        capture = re.compile(r"(\$+)\{(?P<variablename>\w+)\?(err)\}")
         matches = capture.search(value)
+        if matches is not None and matches[1] == "$$":
+            return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
             if env_var is None:
@@ -92,15 +101,23 @@ class ComposeDataTypeTransformer():
     def replace_environment_variables_with_braces(self, value):
         capture = re.compile(r"\$\{(?P<variablename>\w+)\}")
         matches = capture.search(value)
+        if matches is not None and matches[1] == "$$":
+            return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
             value = re.sub(f"\\{matches[0]}", env_var, value)
             matches = capture.search(value)
         return value
 
+    def do_not_replace_variables(self, value):
+        value = re.sub(r"\$\$", "$", value)
+        return value
+
     def replace_environment_variables_without_braces(self, value):
-        capture = re.compile(r"\$(?P<variablename>\w+)")
+        capture = re.compile(r"(\$+)(?P<variablename>\w+)")
         matches = capture.search(value)
+        if matches is not None and matches[1] == "$$":
+            return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
             value = re.sub(f"\\{matches[0]}", env_var, value)

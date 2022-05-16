@@ -90,3 +90,9 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
     def test_service_with_mandatory_unset_env_vars(self):
         with self.assertRaises(EmptyOrUnsetException):
             ComposeGenerator.get_compose_with_mandatory_unset_env_vars()
+
+    @mock.patch.dict(os.environ, {"ENVIRONMENT": "local"})
+    def test_service_with_double_dollar_sign_env_vars(self):
+        compose_file = ComposeGenerator.get_compose_with_double_dollar_sign_env_vars()
+
+        self.assertEqual(compose_file.services["frontend"].environment["ENVIRONMENT"], "$ENVIRONMENT")

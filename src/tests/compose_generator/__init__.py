@@ -451,6 +451,17 @@ services:
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
 
     @staticmethod
+    def get_compose_with_double_dollar_sign_env_vars():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    environment:
+      - ENVIRONMENT=$$ENVIRONMENT
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
     def get_compose_with_mandatory_unset_env_vars():
         compose = """
 services:
