@@ -1,6 +1,7 @@
 from unittest import TestCase, mock
 import os
 from ..compose_generator import ComposeGenerator
+from pycomposefile.compose_element import EmptyOrUnsetException
 
 
 class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
@@ -80,3 +81,12 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         self.assertEqual(compose_file.services["frontend"].environment["RACK_ENV"], "test")
         self.assertEqual(compose_file.services["frontend"].environment["URL"], "https://127.0.0.1")
         self.assertEqual(compose_file.services["frontend"].environment["VERSION"], "release")
+
+    @mock.patch.dict(os.environ, {"URL": "https://127.0.0.1"})
+    def test_service_with_mandatory_env_vars(self):
+        with self.assertRaises(EmptyOrUnsetException):
+            ComposeGenerator.get_compose_with_mandatory_env_vars()
+
+    def test_service_with_mandatory_unset_env_vars(self):
+        with self.assertRaises(EmptyOrUnsetException):
+            ComposeGenerator.get_compose_with_mandatory_unset_env_vars()
