@@ -426,6 +426,19 @@ services:
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
 
     @staticmethod
+    def get_compose_with_os_environment_vars():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    environment:
+      - RACK_ENV=${RACK_ENV}
+      - URL=${DEPLOY_ENV:-${test}}
+      - VERSION=${VERSION:-default}
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
     def get_compose_with_one_secret():
         compose = """
 services:

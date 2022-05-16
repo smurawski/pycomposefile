@@ -1,9 +1,9 @@
-import unittest
+from unittest import TestCase, mock
 import os
 from ..compose_generator import ComposeGenerator
 
 
-class TestBracesNoUnderscoreNoDigitVariableInterpolation(unittest.TestCase):
+class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
 
     def test_uppercase_in_string_value(self):
         env_var = "TESTNAME"
@@ -71,6 +71,12 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(unittest.TestCase):
         self.assertEqual(compose_file.services["frontend"].ports[0].published, "8080")
         self.assertEqual(compose_file.services["frontend"].ports[0].target, "80")
 
+    @mock.patch.dict(os.environ, {"RACK_ENV": "test"})
+    @mock.patch.dict(os.environ, {"test": "https://127.0.0.1"})
+    @mock.patch.dict(os.environ, {"VERSION": "release"})
+    def test_service_with_os_environment_vars(self):
+        compose_file = ComposeGenerator.get_compose_with_os_environment_vars()
 
-if __name__ == '__main__':
-    unittest.main()
+        self.assertEqual(compose_file.services["frontend"].environment["RACK_ENV"], "test")
+        self.assertEqual(compose_file.services["frontend"].environment["URL"], "https://127.0.0.1")
+        self.assertEqual(compose_file.services["frontend"].environment["VERSION"], "release")

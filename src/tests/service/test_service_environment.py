@@ -1,9 +1,11 @@
-import unittest
+from unittest import TestCase
+
+from src.pycomposefile import compose_file
 
 from ..compose_generator import ComposeGenerator
 
 
-class TestComposeServiceEnvironment(unittest.TestCase):
+class TestComposeServiceEnvironment(TestCase):
     def test_service_with_environment_map(self):
         compose_file = ComposeGenerator.get_compose_with_environment_map()
 

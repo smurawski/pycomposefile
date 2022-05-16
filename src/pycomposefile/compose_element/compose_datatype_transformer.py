@@ -23,15 +23,15 @@ class ComposeDataTypeTransformer():
 
     def replace_environment_variables(self, value):
         value = str(value)
-        value = self.replace_environment_variables_with_empty_unset(value)
-        value = self.replace_environment_variables_with_unset(value)
         value = self.replace_environment_variables_with_braces(value)
         value = self.replace_environment_variables_without_braces(value)
+        value = self.replace_environment_variables_with_empty_unset(value)
+        value = self.replace_environment_variables_with_unset(value)
 
         return value
 
     def replace_environment_variables_with_empty_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)\:-(?P<defaultvalue>\w+)\}")
+        capture = re.compile(r"\$\{(?P<variablename>\w+)\:-(?P<defaultvalue>.+)\}")
         matches = capture.search(value)
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
@@ -43,7 +43,7 @@ class ComposeDataTypeTransformer():
         return value
 
     def replace_environment_variables_with_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)-(?P<defaultvalue>\w+)\}")
+        capture = re.compile(r"\$\{(?P<variablename>\w+)-(?P<defaultvalue>.+)\}")
         matches = capture.search(value)
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
