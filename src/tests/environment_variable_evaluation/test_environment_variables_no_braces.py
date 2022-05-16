@@ -1,9 +1,9 @@
-import unittest
+from unittest import TestCase
 import os
 from ..compose_generator import ComposeGenerator
 
 
-class TestNoBraceNoUnderscoreNoDigitEnvironmentVariable(unittest.TestCase):
+class TestNoBraceNoUnderscoreNoDigitEnvironmentVariable(TestCase):
 
     def test_uppercase_in_string_value(self):
         env_var = "TESTNAME"
@@ -48,7 +48,3 @@ class TestNoBraceNoUnderscoreNoDigitEnvironmentVariable(unittest.TestCase):
         self.assertEqual(f"{compose_file.services['frontend'].ports[0]}", "8080:80/tcp")
         self.assertEqual(compose_file.services["frontend"].ports[0].published, "8080")
         self.assertEqual(compose_file.services["frontend"].ports[0].target, "80")
-
-
-if __name__ == '__main__':
-    unittest.main()
