@@ -1,8 +1,6 @@
 import re
 import os
 
-from pyparsing import And
-
 
 class ComposeDataTypeTransformer():
     def transform_supported_data(self, transform, value, valid_values=None):
@@ -25,15 +23,15 @@ class ComposeDataTypeTransformer():
 
     def replace_environment_variables(self, value):
         value = str(value)
-        value = self.replace_environment_variables_with_empty_unset(value)
-        value = self.replace_environment_variables_with_unset(value)
         value = self.replace_environment_variables_with_braces(value)
         value = self.replace_environment_variables_without_braces(value)
+        value = self.replace_environment_variables_with_empty_unset(value)
+        value = self.replace_environment_variables_with_unset(value)
 
         return value
 
     def replace_environment_variables_with_empty_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)\:-(?P<defaultvalue>\w+)\}")
+        capture = re.compile(r"\$\{(?P<variablename>\w+)\:-(?P<defaultvalue>.+)\}")
         matches = capture.search(value)
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
@@ -45,7 +43,7 @@ class ComposeDataTypeTransformer():
         return value
 
     def replace_environment_variables_with_unset(self, value):
-        capture = re.compile(r"\$\{(?P<variablename>\w+)-(?P<defaultvalue>\w+)\}")
+        capture = re.compile(r"\$\{(?P<variablename>\w+)-(?P<defaultvalue>.+)\}")
         matches = capture.search(value)
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
@@ -63,12 +61,6 @@ class ComposeDataTypeTransformer():
             env_var = os.environ.get(matches.group("variablename"))
             value = re.sub(f"\\{matches[0]}", env_var, value)
             matches = capture.search(value)
-            # nested interpolation check
-            # TODO Learn how to make less janky
-            if ":-" in value:
-                array = value.rsplit(":-")
-                key = array[0].rsplit("${")
-                value = f"{key[0]}{array[1].rstrip('}')}"
         return value
 
     def replace_environment_variables_without_braces(self, value):
