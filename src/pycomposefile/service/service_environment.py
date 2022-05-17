@@ -6,9 +6,6 @@ class Environment(ComposeListOrMapElement):
 
 
 class EnvFile(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = str
-        super().__init__(config, key, compose_path)
 
     def readFile(self):
         env_array = []

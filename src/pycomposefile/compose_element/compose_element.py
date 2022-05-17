@@ -45,19 +45,19 @@ class ComposeElement(ComposeDataTypeTransformer):
             pass
 
     def set_supported_property_from_config(self, key, key_config, value, compose_path):
-        valid_values = None
         if type(key_config[0]) is tuple:
-            transform, valid_values = key_config[0]
+            self.transform, self.valid_values = key_config[0]
         else:
-            transform = key_config[0]
+            self.transform = key_config[0]
+            self.valid_values = None
 
-        if transform is not None:
+        if self.transform is not None:
             if isinstance(value, dict):
-                value = transform(value, key, compose_path)
+                value = self.transform(value, key, compose_path)
             elif isinstance(value, list):
-                value = transform(value, key, compose_path)
+                value = self.transform(value, key, compose_path)
             elif value is not None:
-                value = self.transform_supported_data(transform, value, valid_values)
+                value = self.transform_supported_data(value)
         else:
             # TODO: Logging message if value was not None
             value = None

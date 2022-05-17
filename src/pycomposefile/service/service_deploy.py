@@ -33,10 +33,6 @@ class Placement(ComposeElement):
     }
 
 
-class Labels(ComposeListOrMapElement):
-    pass
-
-
 class DeployTimespan(str):
 
     @classmethod
@@ -59,6 +55,10 @@ class UpdateConfig(ComposeElement):
         "max_failure_ratio": (str, ""),
         "order": ((str, ["stop-first", "start-first"]), ""),
     }
+
+
+class Labels(ComposeListOrMapElement):
+    pass
 
 
 class Deploy(ComposeElement):

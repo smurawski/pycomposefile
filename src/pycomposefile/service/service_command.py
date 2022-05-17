@@ -3,9 +3,6 @@ from pycomposefile.compose_element import ComposeStringOrListElement
 
 
 class Command(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = str
-        super().__init__(config, key, compose_path)
 
     def command_string(self):
         capture = re.compile(r"\w+(\s\w+)+")

@@ -50,7 +50,4 @@ CAP_LIST = [
 
 
 class Cap(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = str
-        self.valid_values = CAP_LIST
-        super().__init__(config, key, compose_path)
+    valid_values = CAP_LIST

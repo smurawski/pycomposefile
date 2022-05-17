@@ -12,23 +12,34 @@ class EmptyOrUnsetException(Exception):
 
 
 class ComposeDataTypeTransformer():
-    def transform_supported_data(self, transform, value, valid_values=None):
-        if valid_values is not None:
-            value = self.transform_and_validate_supported_data(value, transform, valid_values)
+    transform = str
+    valid_values = None
+
+    def transform_supported_data(self, value):
+        if self.valid_values is not None:
+            value = self.transform_and_validate_supported_data(value)
         else:
-            value = transform(self.replace_environment_variables(value))
+            value = self.transform(self.replace_environment_variables(value))
         return value
 
-    def transform_and_validate_supported_data(self, value, data_transformer, valid_values):
+    def test_valid_string(self, value):
+        if isinstance(value, str):
+            return value in self.valid_values
+        return False
+
+    def test_valid_int(self, value):
+        if isinstance(value, int):
+            return self.valid_values[0] <= value <= self.valid_values[1]
+        return False
+
+    def transform_and_validate_supported_data(self, value):
         # TODO: if the data is an integer or decimal, should there be a "between" check?
-        transformed = data_transformer(self.replace_environment_variables(value))
-        if isinstance(transformed, int) and valid_values[0] <= transformed <= valid_values[1]:
+        transformed = self.transform(self.replace_environment_variables(value))
+        if self.test_valid_string(transformed) or self.test_valid_int(transformed):
             return transformed
-        elif transformed not in valid_values:
+        else:
             # TODO: Should this return None or should this raise?
             return None
-        else:
-            return transformed
 
     def replace_environment_variables(self, value):
         value = str(value)
