@@ -19,12 +19,8 @@ class Config(ComposeElement):
 
 
 class Configs(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = Config
-        super().__init__(config, key, compose_path)
+    transform = Config
 
 
 class Secrets(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = Config
-        super().__init__(config, key, compose_path)
+    transform = Config

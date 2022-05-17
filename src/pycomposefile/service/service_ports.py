@@ -52,6 +52,4 @@ class Port(ComposeElement):
 
 
 class Ports(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = Port
-        super().__init__(config, 'ports', compose_path)
+    transform = Port

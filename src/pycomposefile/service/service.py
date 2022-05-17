@@ -1,52 +1,26 @@
 from decimal import Decimal
+from tkinter import Label
+from unittest.loader import VALID_MODULE_NAME
 
+from pycomposefile.service.service_misc import (Expose, Dns, DnsOpt,
+                                                DnsSearch, ExternalLinks,
+                                                ExtraHosts, GroupAdd,
+                                                SecurityOpt, DependsOn,
+                                                Links, StorageOpt, SysCtls,
+                                                Tmpfs, Ulimits)
 from pycomposefile.service.service_blkio_config import BlkioConfig
-from pycomposefile.service.service_deploy import Deploy
+from pycomposefile.service.service_deploy import (Deploy, Labels)
 from pycomposefile.service.service_credential_spec import CredentialSpec
 from pycomposefile.service.service_cap import Cap
-from pycomposefile.service.service_configs import Configs, Secrets
+from pycomposefile.service.service_configs import (Configs, Secrets)
 from pycomposefile.service.service_command import Command
-from pycomposefile.service.service_environment import Environment, EnvFile
+from pycomposefile.service.service_environment import (Environment, EnvFile)
+from pycomposefile.service.service_healthcheck import HealthCheck
+from pycomposefile.service.service_logging import Logging
+from pycomposefile.service.service_networks import Networks
 from pycomposefile.service.service_ports import Ports
-from pycomposefile.compose_element import ComposeElement, ComposeStringOrListElement, ComposeByteValue
-
-
-class Expose(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = int
-        super().__init__(config, key, compose_path)
-
-
-class CpuSets(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = str
-        super().__init__(config, key, compose_path)
-
-
-class Dependency(str):
-    def __new__(cls, config, key=None, compose_path=None, ) -> None:
-        condition = None
-        if isinstance(config, Dependency):
-            return config
-        if isinstance(config, tuple):
-            name, detail = config
-            condition = detail["condition"]
-        else:
-            name = config
-        ob = super(Dependency, cls).__new__(cls, name)
-        ob.__setattr__('condition', condition)
-        return ob
-
-
-class DependsOn(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = Dependency
-        if isinstance(config, dict):
-            config_to_list = []
-            for key in config.keys():
-                config_to_list.append((key, config[key]))
-            config = config_to_list
-        super().__init__(config, key, compose_path)
+from pycomposefile.service.service_volumes import Volumes, VolumesFrom
+from pycomposefile.compose_element import (ComposeElement, ComposeByteValue)
 
 
 class Service(ComposeElement):
@@ -68,6 +42,7 @@ class Service(ComposeElement):
         "cpu_shares": (int,
                        "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_shares"),
         "cpu_period": (str,
+
                        "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_period"),
         "cpu_quota": (int,
                       "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_quota"),
@@ -93,6 +68,54 @@ class Service(ComposeElement):
         "mem_reservation": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_reservation"),
         "secrets": (Secrets, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#secrets"),
         "scale": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#scale"),
+        "dns": (Dns, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#dns"),
+        "dns_opt": (DnsOpt, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#dns_opt"),
+        "dns_search": (DnsSearch, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#dns_search"),
+        "domainname": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#domainname"),
+        "external_links": (ExternalLinks, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#external_links"),
+        "extra_hosts": (ExtraHosts, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#extra_hosts"),
+        "group_add": (GroupAdd, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#group_add"),
+        "healthcheck": (HealthCheck.from_parsed_yaml, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#healthcheck"),
+        "hostname": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#hostname"),
+        "init": (bool, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#init"),
+        "ipc": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#ipc"),
+        "isolation": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#isolation"),
+        "labels": (Labels, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#labels"),
+        "links": (Links, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#links"),
+        "logging": (Logging, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#logging"),
+        "network_mode": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#network_mode"),
+        "networks": (Networks, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#networks"),
+        "mac_address": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mac_address"),
+        "mem_limit": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_limit"),
+        "mem_reservation": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_reservation"),
+        "mem_swappiness": ((int, [0, 100]), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_swappiness"),
+        "memswap_limit": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#memswap_limit"),
+        "oom_kill_disable": (bool, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#oom_kill_disable"),
+        "oom_score_adj": ((int, [-1000, 1000]), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#oom_score_adj"),
+        "pid": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#pid"),
+        "pids_limit": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#pids_limit"),
+        "platform": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#platform"),
+        "privileged": (bool, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#privileged"),
+        "pull_policy": ((str, ["always", "never", "missing", "build"]), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#pull_policy"),
+        "read_only": (bool, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#read_only"),
+        "restart": ((str, ["no", "always", "on-failure", "unless-stopped"]), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#restart"),
+        "runtime": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#runtime"),
+        "security_opt": (SecurityOpt, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#security_opt"),
+        "shm_size": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#shm_size"),
+        "stdin_open": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#stdin_open"),
+        "stop_grace_period": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#stop_grace_period"),
+        "stop_signal": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#stop_signal"),
+        "storage_opt": (StorageOpt.from_parsed_yaml, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#storage_opt"),
+        "sysctls": (SysCtls, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#sysctls"),
+        "tmpfs": (Tmpfs, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#tmpfs"),
+        "tty": (bool, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#tty"),
+        "ulimits": (Ulimits.from_parsed_yaml, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#ulimits"),
+        "user": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#user"),
+        "userns_mode": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#userns_mode"),
+        "volumes": (Volumes, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#volumes"),
+        "volumes_from": (VolumesFrom, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#volumes_from"),
+        "working_dir": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#working_dir")
+
     }
 
     def entrypoint_and_command(self):

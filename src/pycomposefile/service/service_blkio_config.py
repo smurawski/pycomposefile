@@ -10,9 +10,7 @@ class IoConfig(ComposeElement):
 
 
 class IoConfigList(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = IoConfig.from_parsed_yaml
-        super().__init__(config, key, compose_path)
+    transform = IoConfig.from_parsed_yaml
 
 
 class WeightDevice(ComposeElement):
@@ -23,9 +21,7 @@ class WeightDevice(ComposeElement):
 
 
 class WeightDeviceList(ComposeStringOrListElement):
-    def __init__(self, config, key=None, compose_path=None):
-        self.transform = WeightDevice.from_parsed_yaml
-        super().__init__(config, key, compose_path)
+    transform = WeightDevice.from_parsed_yaml
 
 
 class BlkioConfig(ComposeElement):
