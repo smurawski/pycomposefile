@@ -6,10 +6,9 @@ from pycomposefile.compose_element import EmptyOrUnsetException
 
 class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
 
+    @mock.patch.dict(os.environ, {"TESTNAME": "fred"})
     def test_uppercase_in_string_value(self):
-        env_var = "TESTNAME"
-        os.environ[env_var] = "fred"
-        braced_env_var = "{" + env_var + "}"
+        braced_env_var = "{TESTNAME}"
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_var)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/fred")
 
@@ -20,29 +19,25 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/bob")
 
+    @mock.patch.dict(os.environ, {"TESTCPUCOUNT": "1.5"})
     def test_uppercase_in_decimal_value(self):
-        env_var = "TESTCPUCOUNT"
-        os.environ[env_var] = "1.5"
-        braced_env_var = "{" + env_var + "}"
+        braced_env_var = "{TESTCPUCOUNT}"
         compose_file = ComposeGenerator.get_compose_with_decimal_value(braced_env_var)
         self.assertEqual(compose_file.services["frontend"].cpu_count, 1.5)
 
+    @mock.patch.dict(os.environ, {"HOSTPORT": "8080"})
+    @mock.patch.dict(os.environ, {"CONTAINERPORT": "80"})
     def test_uppercase_two_variables_in_string_value(self):
-        first_env_var = "HOSTPORT"
-        second_env_var = "CONTAINERPORT"
-        os.environ[first_env_var] = "8080"
-        os.environ[second_env_var] = "80"
-        braced_first_env_var = "{" + first_env_var + "}"
-        braced_second_env_var = "{" + second_env_var + "}"
+        braced_first_env_var = "{HOSTPORT}"
+        braced_second_env_var = "{CONTAINERPORT}"
         compose_file = ComposeGenerator.get_with_two_environment_variables_in_string_value(braced_first_env_var, braced_second_env_var)
         self.assertEqual(f"{compose_file.services['frontend'].ports[0]}", "8080:80/tcp")
         self.assertEqual(compose_file.services['frontend'].ports[0].published, "8080")
         self.assertEqual(compose_file.services['frontend'].ports[0].target, "80")
 
+    @mock.patch.dict(os.environ, {"testname": "fred"})
     def test_lowercase_in_string_value(self):
-        env_var = "testname"
-        os.environ[env_var] = "fred"
-        braced_env_var = "{" + env_var + "}"
+        braced_env_var = "{testname}"
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_var)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/fred")
 
@@ -53,20 +48,17 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/bob")
 
+    @mock.patch.dict(os.environ, {"testcpucount": "1.5"})
     def test_lowercase_in_decimal_value(self):
-        env_var = "testcpucount"
-        os.environ[env_var] = "1.5"
-        braced_env_var = "{" + env_var + "}"
+        braced_env_var = "{testcpucount}"
         compose_file = ComposeGenerator.get_compose_with_decimal_value(braced_env_var)
         self.assertEqual(compose_file.services["frontend"].cpu_count, 1.5)
 
+    @mock.patch.dict(os.environ, {"hostport": "8080"})
+    @mock.patch.dict(os.environ, {"containerport": "80"})
     def test_lowercase_two_variables_in_string_value(self):
-        first_env_var = "hostport"
-        second_env_var = "containerport"
-        os.environ[first_env_var] = "8080"
-        os.environ[second_env_var] = "80"
-        braced_first_env_var = "{" + first_env_var + "}"
-        braced_second_env_var = "{" + second_env_var + "}"
+        braced_first_env_var = "{hostport}"
+        braced_second_env_var = "{containerport}"
         compose_file = ComposeGenerator.get_with_two_environment_variables_in_string_value(braced_first_env_var, braced_second_env_var)
         self.assertEqual(f"{compose_file.services['frontend'].ports[0]}", "8080:80/tcp")
         self.assertEqual(compose_file.services["frontend"].ports[0].published, "8080")
