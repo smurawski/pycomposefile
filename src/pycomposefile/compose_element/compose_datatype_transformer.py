@@ -42,6 +42,11 @@ class ComposeDataTypeTransformer():
 
         return value
 
+    def update_value_with_resolved_environment(self, env_variable_name, env_variable_value, source_string):
+        if env_variable_value is None:
+            env_variable_value = ""
+        return re.sub(env_variable_name, env_variable_value, source_string)
+
     def replace_environment_variables_with_empty_unset(self, value):
         capture = re.compile(r"(\$+)\{(?P<variablename>\w+)\:-(?P<defaultvalue>.+)\}")
         matches = capture.search(value)
@@ -52,7 +57,7 @@ class ComposeDataTypeTransformer():
             default_value = matches.group("defaultvalue")
             if env_var is None or len(env_var) == 0:
                 env_var = default_value
-            value = re.sub(f"\\{matches[0]}", env_var, value)
+            value = self.update_value_with_resolved_environment(f"\\{matches[0]}", env_var, value)
             matches = capture.search(value)
         return value
 
@@ -66,7 +71,7 @@ class ComposeDataTypeTransformer():
             default_value = matches.group("defaultvalue")
             if env_var is None:
                 env_var = default_value
-            value = re.sub(f"{matches[0]}", env_var, value)
+            value = self.update_value_with_resolved_environment(f"{matches[0]}", env_var, value)
             matches = capture.search(value)
         return value
 
@@ -80,7 +85,7 @@ class ComposeDataTypeTransformer():
             if env_var is None or len(env_var) == 0:
                 raise EmptyOrUnsetException(matches.group("variablename"))
             to_be_replaced = r"\$\{" + matches.group('variablename') + r"\:\?err\}"
-            value = re.sub(to_be_replaced, env_var, value)
+            value = self.update_value_with_resolved_environment(to_be_replaced, env_var, value)
             matches = capture.search(value)
         return value
 
@@ -94,7 +99,7 @@ class ComposeDataTypeTransformer():
             if env_var is None:
                 raise EmptyOrUnsetException(matches.group("variablename"))
             to_be_replaced = r"\$\{" + matches.group('variablename') + r"\?err\}"
-            value = re.sub(to_be_replaced, env_var, value)
+            value = self.update_value_with_resolved_environment(to_be_replaced, env_var, value)
             matches = capture.search(value)
         return value
 
@@ -105,7 +110,7 @@ class ComposeDataTypeTransformer():
             return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
-            value = re.sub(f"\\{matches[0]}", env_var, value)
+            value = self.update_value_with_resolved_environment(f"\\{matches[0]}", env_var, value)
             matches = capture.search(value)
         return value
 
@@ -120,6 +125,6 @@ class ComposeDataTypeTransformer():
             return value
         while matches:
             env_var = os.environ.get(matches.group("variablename"))
-            value = re.sub(f"\\{matches[0]}", env_var, value)
+            value = self.update_value_with_resolved_environment(f"\\{matches[0]}", env_var, value)
             matches = capture.search(value)
         return value
