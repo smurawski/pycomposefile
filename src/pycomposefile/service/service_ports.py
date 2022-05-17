@@ -53,4 +53,3 @@ class Port(ComposeElement):
 
 class Ports(ComposeStringOrListElement):
     transform = Port
-
