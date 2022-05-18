@@ -100,6 +100,7 @@ class Service(ComposeElement):
         "pids_limit": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#pids_limit"),
         "platform": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#platform"),
         "privileged": (bool, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#privileged"),
+        "profiles": (ComposeStringOrListElement, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#profiles"),
         "pull_policy": ((str, ["always", "never", "missing", "build"]), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#pull_policy"),
         "read_only": (bool, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#read_only"),
         "restart": ((str, ["no", "always", "on-failure", "unless-stopped"]), "https://github.com/compose-spec/compose-spec/blob/master/spec.md#restart"),
