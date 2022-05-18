@@ -22,14 +22,10 @@ class Resources(ComposeElement):
     }
 
 
-class PlacementSpec(ComposeListOrMapElement):
-    pass
-
-
 class Placement(ComposeElement):
     element_keys = {
-        "constraints": (PlacementSpec, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#constraints"),
-        "preferences": (PlacementSpec, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#preferences"),
+        "constraints": (ComposeListOrMapElement, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#constraints"),
+        "preferences": (ComposeListOrMapElement, "https://github.com/compose-spec/compose-spec/blob/master/deploy.md#preferences"),
     }
 
 
@@ -57,14 +53,10 @@ class UpdateConfig(ComposeElement):
     }
 
 
-class Labels(ComposeListOrMapElement):
-    pass
-
-
 class Deploy(ComposeElement):
     element_keys = {
         "endpoint_mode": ((str, ["vip", "dnsrr"]), ""),
-        "labels": (Labels, ""),
+        "labels": (ComposeListOrMapElement, ""),
         "mode": ((str, ["global", "replicated"]), ""),
         "replicas": (int, ""),
         "resources": (Resources.from_parsed_yaml, ""),

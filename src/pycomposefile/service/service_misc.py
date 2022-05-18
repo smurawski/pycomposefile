@@ -1,40 +1,10 @@
-from pycomposefile.compose_element import ComposeElement, ComposeByteValue, ComposeListOrMapElement, ComposeStringOrListElement
+from pycomposefile.compose_element import (ComposeElement,
+                                           ComposeByteValue,
+                                           ComposeStringOrListElement)
 
 
 class Expose(ComposeStringOrListElement):
     transform = int
-
-
-class CpuSets(ComposeStringOrListElement):
-    pass
-
-
-class Dns(ComposeStringOrListElement):
-    pass
-
-
-class DnsOpt(ComposeStringOrListElement):
-    pass
-
-
-class DnsSearch(ComposeStringOrListElement):
-    pass
-
-
-class ExternalLinks(ComposeStringOrListElement):
-    pass
-
-
-class ExtraHosts(ComposeStringOrListElement):
-    pass
-
-
-class GroupAdd(ComposeStringOrListElement):
-    pass
-
-
-class SecurityOpt(ComposeStringOrListElement):
-    pass
 
 
 class Dependency(str):
@@ -63,22 +33,10 @@ class DependsOn(ComposeStringOrListElement):
         super().__init__(config, key, compose_path)
 
 
-class Links(ComposeStringOrListElement):
-    pass
-
-
 class StorageOpt(ComposeElement):
     element_keys = {
         "size": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#storage_opt")
     }
-
-
-class SysCtls(ComposeListOrMapElement):
-    pass
-
-
-class Tmpfs(ComposeStringOrListElement):
-    pass
 
 
 class Nofile(ComposeElement):

@@ -1,4 +1,6 @@
-from pycomposefile.compose_element import ComposeElement, ComposeStringOrListElement, ComposeByteValue
+from pycomposefile.compose_element import (ComposeElement,
+                                           ComposeStringOrListElement,
+                                           ComposeByteValue)
 
 
 class Tmpfs(ComposeElement):
@@ -67,7 +69,3 @@ class VolumeMap(ComposeElement):
 
 class Volumes(ComposeStringOrListElement):
     transform = VolumeMap.from_parsed_yaml
-
-
-class VolumesFrom(ComposeStringOrListElement):
-    pass
