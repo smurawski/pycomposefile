@@ -70,6 +70,8 @@ class Service(ComposeElement):
         "mem_reservation": (ComposeByteValue, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#mem_reservation"),
         "secrets": (Secrets, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#secrets"),
         "scale": (int, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#scale"),
+        "device_cgroup_rules": (ComposeStringOrListElement, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#device_cgroup_rules"),
+        "devices": (ComposeStringOrListElement, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#devices"),
         "dns": (ComposeStringOrListElement, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#dns"),
         "dns_opt": (ComposeStringOrListElement, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#dns_opt"),
         "dns_search": (ComposeStringOrListElement, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#dns_search"),
