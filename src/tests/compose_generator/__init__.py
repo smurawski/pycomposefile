@@ -519,3 +519,23 @@ secrets:
     external: true
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_network():
+        compose = """
+version: '3'
+services:
+  grafana:
+    image: grafana/grafana:6.4.4
+    container_name: grafana
+    restart: unless-stopped
+    hostname: grafana
+    network_mode: bridge
+    ports:
+      - 3000:3000/tcp
+    volumes:
+      - /var/lib/grafana:/var/lib/grafana
+      - /var/log/grafana:/var/log/grafana
+      - /etc/grafana/provisioning:/etc/grafana/provisioning
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)

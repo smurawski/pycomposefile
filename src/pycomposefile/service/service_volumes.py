@@ -37,7 +37,7 @@ class VolumeMap(ComposeElement):
     }
 
     @classmethod
-    def from_parsed_yaml(cls, config, name, compose_path):
+    def from_parsed_yaml(cls, config, name=None, compose_path=None):
         if config is None:
             return None
         if isinstance(config, str):
@@ -61,7 +61,7 @@ class VolumeMap(ComposeElement):
                     bind["selinux"] = 'Z'
                     new_dict["bind"] = bind
             else:
-                new_dict["source"], new_dict["target"], options = split_string
+                new_dict["source"], new_dict["target"] = split_string
             config = new_dict
         compose_path = f"{compose_path}/{name}"
         return cls(config, compose_path)
