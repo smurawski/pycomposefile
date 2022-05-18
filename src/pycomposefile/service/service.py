@@ -1,6 +1,5 @@
 from decimal import Decimal
-from tkinter import Label
-from unittest.loader import VALID_MODULE_NAME
+
 
 from pycomposefile.service.service_misc import (Expose,
                                                 DependsOn,
