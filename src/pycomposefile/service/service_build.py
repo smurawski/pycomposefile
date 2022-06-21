@@ -21,3 +21,10 @@ class Build(ComposeElement):
         "secrets": (Secrets, "https://github.com/compose-spec/compose-spec/blob/master/build.md#secrets"),
         "tags": (ComposeListOrMapElement, "https://github.com/compose-spec/compose-spec/blob/master/build.md#tags")
     }
+
+    def __init__(self, config, compose_path=""):
+        if isinstance(config, str):
+            config = {
+                "context": config
+            }
+        super().__init__(config, compose_path)

@@ -27,6 +27,8 @@ from pycomposefile.compose_element import (ComposeElement,
 class Service(ComposeElement):
     element_keys = {
         "image": (str, ""),
+        "build": (Build,
+                  "https://github.com/compose-spec/compose-spec/blob/master/build.md"),
         "container_name": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#container_name"),
         "cpu_count": (Decimal, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_count"),
         "entrypoint": (Command, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#entrypoint"),
@@ -53,8 +55,7 @@ class Service(ComposeElement):
                           "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpu_rt_period"),
         "cpuset": (ComposeStringOrListElement,
                    "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cpuset"),
-        "build": (Build.from_parsed_yaml,
-                  "https://github.com/compose-spec/compose-spec/blob/master/build.md"),
+
         "cap_add": (Cap,
                     "https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add"),
         "cap_drop": (Cap,

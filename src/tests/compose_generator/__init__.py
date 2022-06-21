@@ -539,3 +539,13 @@ services:
       - /etc/grafana/provisioning:/etc/grafana/provisioning
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_one_service_with_build_context():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    build: ./webapp
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
