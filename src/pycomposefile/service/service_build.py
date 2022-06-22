@@ -22,7 +22,7 @@ class Build(ComposeElement):
         "tags": (ComposeListOrMapElement, "https://github.com/compose-spec/compose-spec/blob/master/build.md#tags")
     }
 
-    def __init__(self, config, compose_path=""):
+    def __init__(self, config, key=None, compose_path=""):
         if isinstance(config, str):
             config = {
                 "context": config

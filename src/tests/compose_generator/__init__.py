@@ -549,3 +549,14 @@ services:
     build: ./webapp
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
+
+    @staticmethod
+    def get_compose_with_one_service_with_specific_build_context():
+        compose = """
+services:
+  frontend:
+    image: awesome/webapp
+    build: 
+      context: ./webapp
+"""
+        return ComposeGenerator.convert_yaml_to_compose_file(compose)
