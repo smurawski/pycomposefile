@@ -19,8 +19,8 @@ class Config(ComposeElement):
 
 
 class Configs(ComposeStringOrListElement):
-    transform = Config
+    target_datatype = Config
 
 
 class Secrets(ComposeStringOrListElement):
-    transform = Config
+    target_datatype = Config

@@ -1,7 +1,7 @@
-from .compose_datatype_transformer import ComposeDataTypeTransformer
+from .compose_datatype_transformer import ComposeDataTypeEvaluator
 
 
-class ComposeListOrMapElement(ComposeDataTypeTransformer, dict):
+class ComposeListOrMapElement(ComposeDataTypeEvaluator, dict):
     def isValueEmpty(self, line):
         line = line.rstrip("=")
         if "=" not in line:
@@ -28,7 +28,7 @@ class ComposeListOrMapElement(ComposeDataTypeTransformer, dict):
             if value is None:
                 pass
             elif isinstance(value, dict):
-                value = self.transform(value, key, compose_path)
+                value = self.target_datatype(value, key, compose_path)
             elif isinstance(value, list):
                 new_list = []
                 for v in value:

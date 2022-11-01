@@ -68,4 +68,4 @@ class VolumeMap(ComposeElement):
 
 
 class Volumes(ComposeStringOrListElement):
-    transform = VolumeMap.from_parsed_yaml
+    target_datatype = VolumeMap.from_parsed_yaml

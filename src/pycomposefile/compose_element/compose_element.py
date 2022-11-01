@@ -1,8 +1,8 @@
 from decimal import Decimal
-from .compose_datatype_transformer import ComposeDataTypeTransformer
+from .compose_datatype_transformer import ComposeDataTypeEvaluator
 
 
-class ComposeByteValue(ComposeDataTypeTransformer):
+class ComposeByteValue(ComposeDataTypeEvaluator):
     compose_path = ""
     value = 0.0
     _conversions = {
@@ -31,7 +31,7 @@ class ComposeByteValue(ComposeDataTypeTransformer):
         return self.value / self._conversions['gb']
 
 
-class ComposeElement(ComposeDataTypeTransformer):
+class ComposeElement(ComposeDataTypeEvaluator):
     element_keys = {}
 
     def __init__(self, config, compose_path=""):
@@ -46,18 +46,18 @@ class ComposeElement(ComposeDataTypeTransformer):
 
     def set_supported_property_from_config(self, key, key_config, value, compose_path):
         if type(key_config[0]) is tuple:
-            self.transform, self.valid_values = key_config[0]
+            self.target_datatype, self.valid_values = key_config[0]
         else:
-            self.transform = key_config[0]
+            self.target_datatype = key_config[0]
             self.valid_values = None
 
-        if self.transform is not None:
+        if self.target_datatype is not None:
             if isinstance(value, dict):
-                value = self.transform(value, key, compose_path)
+                value = self.target_datatype(value, key, compose_path)
             elif isinstance(value, list):
-                value = self.transform(value, key, compose_path)
+                value = self.target_datatype(value, key, compose_path)
             elif value is not None:
-                value = self.transform_supported_data(value)
+                value = self.evaluate_supported_data(value)
         else:
             # TODO: Logging message if value was not None
             value = None

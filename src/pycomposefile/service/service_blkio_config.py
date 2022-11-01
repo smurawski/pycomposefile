@@ -10,7 +10,7 @@ class IoConfig(ComposeElement):
 
 
 class IoConfigList(ComposeStringOrListElement):
-    transform = IoConfig.from_parsed_yaml
+    target_datatype = IoConfig.from_parsed_yaml
 
 
 class WeightDevice(ComposeElement):
@@ -21,7 +21,7 @@ class WeightDevice(ComposeElement):
 
 
 class WeightDeviceList(ComposeStringOrListElement):
-    transform = WeightDevice.from_parsed_yaml
+    target_datatype = WeightDevice.from_parsed_yaml
 
 
 class BlkioConfig(ComposeElement):

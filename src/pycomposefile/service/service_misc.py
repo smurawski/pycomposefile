@@ -4,7 +4,7 @@ from pycomposefile.compose_element import (ComposeElement,
 
 
 class Expose(ComposeStringOrListElement):
-    transform = int
+    target_datatype = int
 
 
 class Dependency(str):
@@ -24,7 +24,7 @@ class Dependency(str):
 
 class DependsOn(ComposeStringOrListElement):
     def __init__(self, config, key=None, compose_path=None):
-        self.transform = Dependency
+        self.target_datatype = Dependency
         if isinstance(config, dict):
             config_to_list = []
             for key in config.keys():

@@ -1,7 +1,7 @@
-from .compose_datatype_transformer import ComposeDataTypeTransformer
+from .compose_datatype_transformer import ComposeDataTypeEvaluator
 
 
-class ComposeStringOrListElement(ComposeDataTypeTransformer, list):
+class ComposeStringOrListElement(ComposeDataTypeEvaluator, list):
     def __init__(self, config, key=None, compose_path=None,):
         if compose_path is not None:
             self.compose_path = f"{compose_path}/{key}"
@@ -25,6 +25,6 @@ class ComposeStringOrListElement(ComposeDataTypeTransformer, list):
 
     def append_transform(self, config_value, key=None, compose_path=None):
         if isinstance(config_value, str) or isinstance(config_value, int):
-            self.append(self.transform_supported_data(config_value))
+            self.append(self.evaluate_supported_data(config_value))
         else:
-            self.append(self.transform(config_value, key, compose_path))
+            self.append(self.target_datatype(config_value, key, compose_path))

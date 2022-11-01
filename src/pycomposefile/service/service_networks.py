@@ -12,4 +12,4 @@ class Network(ComposeElement):
 
 
 class Networks(ComposeListOrMapElement):
-    transform = Network.from_parsed_yaml
+    target_datatype = Network.from_parsed_yaml

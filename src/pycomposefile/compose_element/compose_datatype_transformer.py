@@ -11,15 +11,15 @@ class EmptyOrUnsetException(Exception):
         return f"Failed to evaluate mandatory variable {self.variable_name}"
 
 
-class ComposeDataTypeTransformer():
-    transform = str
+class ComposeDataTypeEvaluator():
+    target_datatype = str
     valid_values = None
 
-    def transform_supported_data(self, value):
+    def evaluate_supported_data(self, value):
         if self.valid_values is not None:
-            value = self.transform_and_validate_supported_data(value)
+            value = self.convert_datatype_and_validate(value)
         else:
-            value = self.transform(self.replace_environment_variables(value))
+            value = self.target_datatype(self.replace_environment_variables(value))
         return value
 
     def test_valid_string(self, value):
@@ -32,11 +32,10 @@ class ComposeDataTypeTransformer():
             return self.valid_values[0] <= value <= self.valid_values[1]
         return False
 
-    def transform_and_validate_supported_data(self, value):
-        # TODO: if the data is an integer or decimal, should there be a "between" check?
-        transformed = self.transform(self.replace_environment_variables(value))
-        if self.test_valid_string(transformed) or self.test_valid_int(transformed):
-            return transformed
+    def convert_datatype_and_validate(self, value):
+        converted_type = self.target_datatype(self.replace_environment_variables(value))
+        if self.test_valid_string(converted_type) or self.test_valid_int(converted_type):
+            return converted_type
         else:
             # TODO: Should this return None or should this raise?
             return None
