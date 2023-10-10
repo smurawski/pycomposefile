@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.pycomposefile import compose_file
+from pycomposefile import compose_file
 
 from ..compose_generator import ComposeGenerator
 
