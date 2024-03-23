@@ -11,6 +11,7 @@ class TestComposeServiceEnvironmentFile(unittest.TestCase):
         self.assertEqual(compose_file.services["frontend"].env_file[0], "./sample/test.env")
         self.assertEqual(environment_from_file["RACK_ENV"], "development")
         self.assertEqual(environment_from_file["VAR"], '"quoted"')
+        self.assertEqual(environment_from_file["SOME_VAR"], '"value with equals=sign"')
 
     def test_service_with_list_environment_file(self):
         compose_file = ComposeGenerator.get_compose_with_environment_file_list()

@@ -15,7 +15,7 @@ class ComposeListOrMapElement(ComposeDataTypeTransformer, dict):
             value = None
             key = source_string.rstrip("=")
         else:
-            key, value = source_string.split("=")
+            key, value = source_string.split("=", 1)
         self[key] = value
 
     def evaluate_from_list(self, source_list):
