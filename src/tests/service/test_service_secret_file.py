@@ -11,7 +11,7 @@ class TestComposeServiceSecretsFile(unittest.TestCase):
         secret_from_file = compose_file.secrets["my_secret"].file.readFile()
 
         self.assertEqual(compose_file.services["frontend"].secrets[0].source, "my_secret")
-        self.assertEqual(compose_file.secrets["my_secret"].file, "./sample/my_secret.txt")
+        self.assertEqual(compose_file.secrets["my_secret"].file, "./src/tests/sample/my_secret.txt")
         self.assertEqual(secret_from_file, secret_value)
 
     def test_service_with_external_secret(self):
@@ -30,5 +30,5 @@ class TestComposeServiceSecretsFile(unittest.TestCase):
         self.assertEqual(compose_file.services["frontend"].secrets[0].target, "redis_secret")
         self.assertEqual(compose_file.services["frontend"].secrets[0].uid, 103)
         self.assertEqual(compose_file.services["frontend"].secrets[0].gid, 103)
-        self.assertEqual(compose_file.secrets["my_secret"].file, "./sample/my_secret.txt")
+        self.assertEqual(compose_file.secrets["my_secret"].file, "./src/tests/sample/my_secret.txt")
         self.assertEqual(secret_from_file, secret_value)
