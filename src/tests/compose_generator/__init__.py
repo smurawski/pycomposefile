@@ -398,7 +398,7 @@ services:
 services:
   frontend:
     image: awesome/webapp
-    env_file: ./sample/test.env
+    env_file: ./src/tests/sample/test.env
     environment:
       - RACK_ENV=development
       - SHOW=true
@@ -414,9 +414,9 @@ services:
   frontend:
     image: awesome/webapp
     env_file:
-      - ./sample/common.env
-      - ./sample/apps/web.env
-      - ./sample/opt/runtime_opts.env
+      - ./src/tests/sample/common.env
+      - ./src/tests/sample/apps/web.env
+      - ./src/tests/sample/opt/runtime_opts.env
     environment:
       - RACK_ENV=canary
       - SHOW=true
@@ -482,7 +482,7 @@ services:
       - my_secret
 secrets:
   my_secret:
-    file: ./sample/my_secret.txt
+    file: ./src/tests/sample/my_secret.txt
 """
         return ComposeGenerator.convert_yaml_to_compose_file(compose)
 
@@ -514,7 +514,7 @@ services:
         mode: 0440
 secrets:
   my_secret:
-    file: ./sample/my_secret.txt
+    file: ./src/tests/sample/my_secret.txt
   my_other_secret:
     external: true
 """
