@@ -1,8 +1,8 @@
 # basic
-setuptools==65.5.1
+setuptools==75.2.0
 pip>=9.0.1
 pyyaml>=6.0
 twine>=3.8
 build>=0.7
-flake8==4.0.1
-pylint==2.13.4
+flake8==7.1.1
+pylint==3.3.1
