@@ -88,3 +88,62 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         compose_file = ComposeGenerator.get_compose_with_double_dollar_sign_env_vars()
 
         self.assertEqual(compose_file.services["frontend"].environment["ENVIRONMENT"], "$ENVIRONMENT")
+
+    def test_uppercase_with_asterisk_as_default(self):
+        env_var = "DEFAULTUNSET"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-*}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/*")
+
+    def test_uppercase_with_plus_as_default(self):
+        env_var = "DEFAULTUNSET"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-+}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/+")
+
+    def test_uppercase_with_question_as_default(self):
+        env_var = "DEFAULTUNSET"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-?}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/?")
+
+    def test_lowercase_with_asterisk_as_default(self):
+        env_var = "defaultunset"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-*}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/*")
+
+    def test_lowercase_with_plus_as_default(self):
+        env_var = "defaultunset"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-+}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/+")
+
+    def test_lowercase_with_question_as_default(self):
+        env_var = "defaultunset"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-?}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/?")
+
+    def test_uppercase_two_variables_with_default_in_string_value(self):
+        braced_first_env_var = "{HOSTPORT:-8080}"
+        braced_second_env_var = "{CONTAINERPORT:-80}"
+        compose_file = ComposeGenerator.get_with_two_environment_variables_in_string_value(braced_first_env_var, braced_second_env_var)
+        self.assertEqual(f"{compose_file.services['frontend'].ports[0]}", "8080:80/tcp")
+        self.assertEqual(compose_file.services['frontend'].ports[0].published, "8080")
+        self.assertEqual(compose_file.services['frontend'].ports[0].target, "80")
+
+    def test_lowercase_two_variables_with_default_in_string_value(self):
+        braced_first_env_var = "{httpport:-8080}"
+        braced_second_env_var = "{containerport:-80}"
+        compose_file = ComposeGenerator.get_with_two_environment_variables_in_string_value(braced_first_env_var, braced_second_env_var)
+        self.assertEqual(f"{compose_file.services['frontend'].ports[0]}", "8080:80/tcp")
+        self.assertEqual(compose_file.services['frontend'].ports[0].published, "8080")
+        self.assertEqual(compose_file.services['frontend'].ports[0].target, "80")
+
