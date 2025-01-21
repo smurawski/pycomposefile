@@ -114,6 +114,14 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         self.assertEqual(compose_file.services["frontend"].image, "awesome/?")
 
     @timeout_decorator.timeout(5)
+    def test_uppercase_with_rightbrace_as_default(self):
+        env_var = "DEFAULTUNSET"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-}}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/}")
+
+    @timeout_decorator.timeout(5)
     def test_lowercase_with_asterisk_as_default(self):
         env_var = "defaultunset"
         os.unsetenv(env_var)
@@ -136,6 +144,14 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         braced_env_with_default_unset = "{" + env_var + ":-?}"
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/?")
+
+    @timeout_decorator.timeout(5)
+    def test_lowercase_with_rightbrace_as_default(self):
+        env_var = "defaultunset"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-}}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/}")
 
     @timeout_decorator.timeout(5)
     def test_uppercase_two_variables_with_default_in_string_value(self):
