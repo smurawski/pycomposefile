@@ -59,7 +59,7 @@ class ComposeDataTypeTransformer():
         return re.sub(env_variable_name, env_variable_value, source_string)
 
     def replace_environment_variables_with_empty_unset(self, value):
-        capture = re.compile(r"(\$+)\{(?P<variablename>\w+)\:-(?P<defaultvalue>.+)\}")
+        capture = re.compile(r"(\$+)\{(?P<variablename>\w+)\:-(?P<defaultvalue>.+?)\}")
         matches = capture.search(value)
         if matches is not None and matches[1] == "$$":
             return value
@@ -68,7 +68,8 @@ class ComposeDataTypeTransformer():
             default_value = matches.group("defaultvalue")
             if env_var is None or len(env_var) == 0:
                 env_var = default_value
-            value = self.update_value_with_resolved_environment(f"\\{matches[0]}", env_var, value)
+            escaped = re.sub(r"([*+?{}])", r"\\\1", matches[0])  # Escaping `}` character
+            value = self.update_value_with_resolved_environment(f"\\{escaped}", env_var, value)
             matches = capture.search(value)
         return value
 
