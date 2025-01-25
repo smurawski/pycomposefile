@@ -26,6 +26,14 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/")
 
+    @timeout_decorator.timeout(5)
+    def test_uppercase_with_nested_default_when_unset_in_string_value(self):
+        env_var = "DEFAULTUNSET"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-${CHILDUNSET:-bob}}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/bob")
+
     @mock.patch.dict(os.environ, {"TESTCPUCOUNT": "1.5"})
     def test_uppercase_in_decimal_value(self):
         braced_env_var = "{TESTCPUCOUNT}"
@@ -61,6 +69,14 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
         braced_env_with_default_unset = "{" + env_var + ":-}"
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
         self.assertEqual(compose_file.services["frontend"].image, "awesome/")
+
+    @timeout_decorator.timeout(5)
+    def test_lowercase_with_nested_default_when_unset_in_string_value(self):
+        env_var = "defaultunset"
+        os.unsetenv(env_var)
+        braced_env_with_default_unset = "{" + env_var + ":-${childunset:-bob}}"
+        compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/bob")
 
     @mock.patch.dict(os.environ, {"testcpucount": "1.5"})
     def test_lowercase_in_decimal_value(self):
@@ -131,9 +147,9 @@ class TestBracesNoUnderscoreNoDigitVariableInterpolation(TestCase):
     def test_uppercase_with_rightbrace_as_default(self):
         env_var = "DEFAULTUNSET"
         os.unsetenv(env_var)
-        braced_env_with_default_unset = "{" + env_var + ":-}}"
+        braced_env_with_default_unset = "{" + env_var + ":-a}-}"
         compose_file = ComposeGenerator.get_compose_with_string_value(braced_env_with_default_unset)
-        self.assertEqual(compose_file.services["frontend"].image, "awesome/}")
+        self.assertEqual(compose_file.services["frontend"].image, "awesome/a-}") # 
 
     @timeout_decorator.timeout(5)
     def test_lowercase_with_asterisk_as_default(self):
