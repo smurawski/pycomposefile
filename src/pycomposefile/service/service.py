@@ -138,7 +138,7 @@ class Service(ComposeElement):
     def resolve_environment_hierarchy(self):
         if self.env_file is not None:
             env_file = self.env_file.readFile()
-            env_file.update(self.environment)
+            env_file.update(self.environment or [])
             return env_file
         else:
             return self.environment
