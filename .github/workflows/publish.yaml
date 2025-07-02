@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.10 
+      - name: Set up Python 3.10
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
@@ -24,9 +24,8 @@ jobs:
       - name: Build a binary wheel and a source tarball
         run: |
           cd src
+          sed -i 's/^version = ".*"$/version = "'${GITHUB_REF_NAME#v}'"/' pyproject.toml
           python -m build --sdist --wheel --outdir dist/ .
-        env:
-          BUILD_TAG: ${{ github.ref_name }}
 
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
