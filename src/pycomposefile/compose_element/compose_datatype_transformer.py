@@ -68,7 +68,7 @@ class ComposeDataTypeTransformer():
             default_value = matches.group("defaultvalue")
             if env_var is None or len(env_var) == 0:
                 env_var = default_value
-            escaped = re.sub(r"([*+?{}])", r"\\\1", matches[0]) # escape special characters
+            escaped = re.sub(r"([*+?{}])", r"\\\1", matches[0])  # escape special characters
             value = self.update_value_with_resolved_environment(f"\\{escaped}", env_var, value)
             matches = capture.search(value)
         return value
