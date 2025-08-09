@@ -25,6 +25,7 @@ from pycomposefile.compose_element import (ComposeElement,
 
 
 class Service(ComposeElement):
+    # Keep element_keys for compatibility and reference, but will not be used for dynamic property creation
     element_keys = {
         "image": (str, ""),
         "build": (Build,
@@ -121,6 +122,135 @@ class Service(ComposeElement):
         "working_dir": (str, "https://github.com/compose-spec/compose-spec/blob/master/spec.md#working_dir")
 
     }
+
+    def __init__(self, config, compose_path=""):
+        # Initialize the base class attributes but bypass its dynamic property creation
+        self.compose_path = compose_path
+        
+        # Initialize all properties explicitly with None as default
+        self.image = None
+        self.build = None
+        self.container_name = None
+        self.cpu_count = None
+        self.entrypoint = None
+        self.command = None
+        self.deploy = None
+        self.expose = None
+        self.ports = None
+        self.cpus = None
+        self.credential_spec = None
+        self.blkio_config = None
+        self.cpu_percent = None
+        self.cpu_shares = None
+        self.cpu_period = None
+        self.cpu_quota = None
+        self.cpu_rt_runtime = None
+        self.cpu_rt_period = None
+        self.cpuset = None
+        self.cap_add = None
+        self.cap_drop = None
+        self.cgroup_parent = None
+        self.configs = None
+        self.depends_on = None
+        self.env_file = None
+        self.environment = None
+        self.mem_reservation = None
+        self.secrets = None
+        self.scale = None
+        self.device_cgroup_rules = None
+        self.devices = None
+        self.dns = None
+        self.dns_opt = None
+        self.dns_search = None
+        self.domainname = None
+        self.external_links = None
+        self.extra_hosts = None
+        self.group_add = None
+        self.healthcheck = None
+        self.hostname = None
+        self.init = None
+        self.ipc = None
+        self.isolation = None
+        self.labels = None
+        self.links = None
+        self.logging = None
+        self.network_mode = None
+        self.networks = None
+        self.mac_address = None
+        self.mem_limit = None
+        self.mem_swappiness = None
+        self.memswap_limit = None
+        self.oom_kill_disable = None
+        self.oom_score_adj = None
+        self.pid = None
+        self.pids_limit = None
+        self.platform = None
+        self.privileged = None
+        self.profiles = None
+        self.pull_policy = None
+        self.read_only = None
+        self.restart = None
+        self.runtime = None
+        self.security_opt = None
+        self.shm_size = None
+        self.stdin_open = None
+        self.stop_grace_period = None
+        self.stop_signal = None
+        self.storage_opt = None
+        self.sysctls = None
+        self.tmpfs = None
+        self.tty = None
+        self.ulimits = None
+        self.user = None
+        self.userns_mode = None
+        self.volumes = None
+        self.volumes_from = None
+        self.working_dir = None
+        
+        # Process config using the same logic as the parent class
+        for key in self.element_keys.keys():
+            config_element = config.pop(key, None)
+            key_config = self.element_keys[key]
+            self._set_property_from_config(key, key_config, config_element, compose_path)
+        
+        # Handle any remaining unprocessed config keys
+        for key in config.keys():
+            # raise Exception(f"Failed to map {key} in {compose_path}")
+            pass
+
+    def _set_property_from_config(self, key, key_config, value, compose_path):
+        """Set a specific property from config, preserving the original transformation logic."""
+        if type(key_config[0]) is tuple:
+            transform, valid_values = key_config[0]
+        else:
+            transform = key_config[0]
+            valid_values = None
+
+        # Apply the same transformation logic as the original
+        if transform is not None:
+            if isinstance(value, dict):
+                value = transform(value, key, compose_path)
+            elif isinstance(value, list):
+                value = transform(value, key, compose_path)
+            elif value is not None:
+                # Set up temporary transform context for data transformation
+                original_transform = getattr(self, 'transform', None)
+                original_valid_values = getattr(self, 'valid_values', None)
+                
+                self.transform = transform
+                self.valid_values = valid_values
+                
+                value = self.transform_supported_data(value)
+                
+                # Restore original transform context
+                self.transform = original_transform
+                self.valid_values = original_valid_values
+        else:
+            # TODO: Logging message if value was not None
+            value = None
+        
+        # Explicitly set the attribute instead of using dynamic setattr
+        setattr(self, key, value)
 
     def entrypoint_and_command(self):
         if self.command is None and self.entrypoint is None:
