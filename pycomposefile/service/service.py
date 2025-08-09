@@ -126,7 +126,7 @@ class Service(ComposeElement):
     def __init__(self, config, compose_path=""):
         # Initialize the base class attributes but bypass its dynamic property creation
         self.compose_path = compose_path
-        
+
         # Initialize all properties explicitly with None as default
         self.image = None
         self.build = None
@@ -206,13 +206,13 @@ class Service(ComposeElement):
         self.volumes = None
         self.volumes_from = None
         self.working_dir = None
-        
+
         # Process config using the same logic as the parent class
         for key in self.element_keys.keys():
             config_element = config.pop(key, None)
             key_config = self.element_keys[key]
             self._set_property_from_config(key, key_config, config_element, compose_path)
-        
+
         # Handle any remaining unprocessed config keys
         for key in config.keys():
             # raise Exception(f"Failed to map {key} in {compose_path}")
@@ -236,19 +236,19 @@ class Service(ComposeElement):
                 # Set up temporary transform context for data transformation
                 original_transform = getattr(self, 'transform', None)
                 original_valid_values = getattr(self, 'valid_values', None)
-                
+
                 self.transform = transform
                 self.valid_values = valid_values
-                
+
                 value = self.transform_supported_data(value)
-                
+
                 # Restore original transform context
                 self.transform = original_transform
                 self.valid_values = original_valid_values
         else:
             # TODO: Logging message if value was not None
             value = None
-        
+
         # Explicitly set the attribute instead of using dynamic setattr
         setattr(self, key, value)
 
